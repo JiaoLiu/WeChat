@@ -7,8 +7,12 @@
 //
 
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
+#import "Reachability.h"
+#import "loginViewController.h"
 
 @implementation AppDelegate
+@synthesize loginView;
 
 - (void)dealloc
 {
@@ -19,6 +23,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [Parse setApplicationId:@"oiwE05WPJsNJuUw0P2zD3DeMGlAs0T2WgZHBGRiu" clientKey:@"xfhAuxDp577F5JX5at1zh6FoPwct6M7acX8lGISp"];
+    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notify" message:@"No Internet Connection!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    loginView = [[loginViewController alloc] init];
+    self.window.rootViewController = loginView;
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 							
@@ -26,6 +42,10 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notify" message:@"No Internet Connection!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil];
+        [alert show];
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application

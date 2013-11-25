@@ -17,12 +17,26 @@
 		AA82E39E183F271F000CB554 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA82E39D183F271F000CB554 /* Default@2x.png */; };
 		AA82E3A0183F271F000CB554 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA82E39F183F271F000CB554 /* Default-568h@2x.png */; };
 		AA82E3A3183F271F000CB554 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA82E3A1183F271F000CB554 /* MainStoryboard.storyboard */; };
-		AA82E3A6183F271F000CB554 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E3A5183F271F000CB554 /* ViewController.m */; };
+		AA82E3A6183F271F000CB554 /* loginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E3A5183F271F000CB554 /* loginViewController.m */; };
 		AA82E3AE183F2720000CB554 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3AD183F2720000CB554 /* SenTestingKit.framework */; };
 		AA82E3AF183F2720000CB554 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E389183F271F000CB554 /* UIKit.framework */; };
 		AA82E3B0183F2720000CB554 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38B183F271F000CB554 /* Foundation.framework */; };
 		AA82E3B8183F2720000CB554 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA82E3B6183F2720000CB554 /* InfoPlist.strings */; };
 		AA82E3BB183F2720000CB554 /* WeChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E3BA183F2720000CB554 /* WeChatTests.m */; };
+		AA82E3C8183F27AC000CB554 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E3C5183F27AC000CB554 /* Reachability.m */; };
+		AA82E3C9183F27AC000CB554 /* UIImage+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E3C7183F27AC000CB554 /* UIImage+Utility.m */; };
+		AA82E3CB183F27D1000CB554 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3CA183F27D1000CB554 /* Parse.framework */; };
+		AA82E3CD183F29DB000CB554 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3CC183F29DB000CB554 /* SystemConfiguration.framework */; };
+		AA82E3CF183F29E1000CB554 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3CE183F29E1000CB554 /* StoreKit.framework */; };
+		AA82E3D1183F29E7000CB554 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3D0183F29E7000CB554 /* Security.framework */; };
+		AA82E3D3183F29F2000CB554 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3D2183F29F2000CB554 /* QuartzCore.framework */; };
+		AA82E3D5183F29FA000CB554 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3D4183F29FA000CB554 /* MobileCoreServices.framework */; };
+		AA82E3D7183F2A00000CB554 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3D6183F2A00000CB554 /* libz.1.1.3.dylib */; };
+		AA82E3D9183F2A07000CB554 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3D8183F2A07000CB554 /* CoreLocation.framework */; };
+		AA82E3DB183F2A0F000CB554 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */; };
+		AA82E3DD183F2A16000CB554 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */; };
+		AAA9EC3E183F2EEF004DF9F8 /* registerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */; };
+		AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,14 +64,32 @@
 		AA82E39D183F271F000CB554 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		AA82E39F183F271F000CB554 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		AA82E3A2183F271F000CB554 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		AA82E3A4183F271F000CB554 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		AA82E3A5183F271F000CB554 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		AA82E3A4183F271F000CB554 /* loginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = loginViewController.h; sourceTree = "<group>"; };
+		AA82E3A5183F271F000CB554 /* loginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = loginViewController.m; sourceTree = "<group>"; };
 		AA82E3AC183F2720000CB554 /* WeChatTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeChatTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA82E3AD183F2720000CB554 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		AA82E3B5183F2720000CB554 /* WeChatTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeChatTests-Info.plist"; sourceTree = "<group>"; };
 		AA82E3B7183F2720000CB554 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AA82E3B9183F2720000CB554 /* WeChatTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeChatTests.h; sourceTree = "<group>"; };
 		AA82E3BA183F2720000CB554 /* WeChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeChatTests.m; sourceTree = "<group>"; };
+		AA82E3C4183F27AC000CB554 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		AA82E3C5183F27AC000CB554 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		AA82E3C6183F27AC000CB554 /* UIImage+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Utility.h"; sourceTree = "<group>"; };
+		AA82E3C7183F27AC000CB554 /* UIImage+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Utility.m"; sourceTree = "<group>"; };
+		AA82E3CA183F27D1000CB554 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		AA82E3CC183F29DB000CB554 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		AA82E3CE183F29E1000CB554 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		AA82E3D0183F29E7000CB554 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		AA82E3D2183F29F2000CB554 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		AA82E3D4183F29FA000CB554 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		AA82E3D6183F2A00000CB554 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
+		AA82E3D8183F2A07000CB554 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		AAA9EC3C183F2EEF004DF9F8 /* registerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registerViewController.h; sourceTree = "<group>"; };
+		AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = registerViewController.m; sourceTree = "<group>"; };
+		AAD04942183F5CE500FCB3B1 /* friendlistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = friendlistViewController.h; sourceTree = "<group>"; };
+		AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = friendlistViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +97,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA82E3DD183F2A16000CB554 /* AudioToolbox.framework in Frameworks */,
+				AA82E3DB183F2A0F000CB554 /* CFNetwork.framework in Frameworks */,
+				AA82E3D9183F2A07000CB554 /* CoreLocation.framework in Frameworks */,
+				AA82E3D7183F2A00000CB554 /* libz.1.1.3.dylib in Frameworks */,
+				AA82E3D5183F29FA000CB554 /* MobileCoreServices.framework in Frameworks */,
+				AA82E3D3183F29F2000CB554 /* QuartzCore.framework in Frameworks */,
+				AA82E3D1183F29E7000CB554 /* Security.framework in Frameworks */,
+				AA82E3CF183F29E1000CB554 /* StoreKit.framework in Frameworks */,
+				AA82E3CD183F29DB000CB554 /* SystemConfiguration.framework in Frameworks */,
+				AA82E3CB183F27D1000CB554 /* Parse.framework in Frameworks */,
 				AA82E38A183F271F000CB554 /* UIKit.framework in Frameworks */,
 				AA82E38C183F271F000CB554 /* Foundation.framework in Frameworks */,
 				AA82E38E183F271F000CB554 /* CoreGraphics.framework in Frameworks */,
@@ -106,6 +148,16 @@
 		AA82E388183F271F000CB554 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */,
+				AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */,
+				AA82E3D8183F2A07000CB554 /* CoreLocation.framework */,
+				AA82E3D6183F2A00000CB554 /* libz.1.1.3.dylib */,
+				AA82E3D4183F29FA000CB554 /* MobileCoreServices.framework */,
+				AA82E3D2183F29F2000CB554 /* QuartzCore.framework */,
+				AA82E3D0183F29E7000CB554 /* Security.framework */,
+				AA82E3CE183F29E1000CB554 /* StoreKit.framework */,
+				AA82E3CC183F29DB000CB554 /* SystemConfiguration.framework */,
+				AA82E3CA183F27D1000CB554 /* Parse.framework */,
 				AA82E389183F271F000CB554 /* UIKit.framework */,
 				AA82E38B183F271F000CB554 /* Foundation.framework */,
 				AA82E38D183F271F000CB554 /* CoreGraphics.framework */,
@@ -120,8 +172,16 @@
 				AA82E398183F271F000CB554 /* AppDelegate.h */,
 				AA82E399183F271F000CB554 /* AppDelegate.m */,
 				AA82E3A1183F271F000CB554 /* MainStoryboard.storyboard */,
-				AA82E3A4183F271F000CB554 /* ViewController.h */,
-				AA82E3A5183F271F000CB554 /* ViewController.m */,
+				AA82E3A4183F271F000CB554 /* loginViewController.h */,
+				AA82E3A5183F271F000CB554 /* loginViewController.m */,
+				AAA9EC3C183F2EEF004DF9F8 /* registerViewController.h */,
+				AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */,
+				AAD04942183F5CE500FCB3B1 /* friendlistViewController.h */,
+				AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */,
+				AA82E3C4183F27AC000CB554 /* Reachability.h */,
+				AA82E3C5183F27AC000CB554 /* Reachability.m */,
+				AA82E3C6183F27AC000CB554 /* UIImage+Utility.h */,
+				AA82E3C7183F27AC000CB554 /* UIImage+Utility.m */,
 				AA82E390183F271F000CB554 /* Supporting Files */,
 			);
 			path = WeChat;
@@ -272,7 +332,11 @@
 			files = (
 				AA82E396183F271F000CB554 /* main.m in Sources */,
 				AA82E39A183F271F000CB554 /* AppDelegate.m in Sources */,
-				AA82E3A6183F271F000CB554 /* ViewController.m in Sources */,
+				AA82E3A6183F271F000CB554 /* loginViewController.m in Sources */,
+				AA82E3C8183F27AC000CB554 /* Reachability.m in Sources */,
+				AA82E3C9183F27AC000CB554 /* UIImage+Utility.m in Sources */,
+				AAA9EC3E183F2EEF004DF9F8 /* registerViewController.m in Sources */,
+				AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +443,10 @@
 		AA82E3BF183F2720000CB554 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeChat/WeChat-Prefix.pch";
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
@@ -390,6 +458,10 @@
 		AA82E3C0183F2720000CB554 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeChat/WeChat-Prefix.pch";
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
@@ -451,6 +523,7 @@
 				AA82E3C0183F2720000CB554 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		AA82E3C1183F2720000CB554 /* Build configuration list for PBXNativeTarget "WeChatTests" */ = {
 			isa = XCConfigurationList;
@@ -459,6 +532,7 @@
 				AA82E3C3183F2720000CB554 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
