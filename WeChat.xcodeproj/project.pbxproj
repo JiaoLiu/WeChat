@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA6404891843165700340BFB /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6404881843165700340BFB /* ChatViewController.m */; };
 		AA82E38A183F271F000CB554 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E389183F271F000CB554 /* UIKit.framework */; };
 		AA82E38C183F271F000CB554 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38B183F271F000CB554 /* Foundation.framework */; };
 		AA82E38E183F271F000CB554 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38D183F271F000CB554 /* CoreGraphics.framework */; };
@@ -50,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA6404871843165700340BFB /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		AA6404881843165700340BFB /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		AA82E386183F271F000CB554 /* WeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA82E389183F271F000CB554 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AA82E38B183F271F000CB554 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -178,6 +181,8 @@
 				AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */,
 				AAD04942183F5CE500FCB3B1 /* friendlistViewController.h */,
 				AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */,
+				AA6404871843165700340BFB /* ChatViewController.h */,
+				AA6404881843165700340BFB /* ChatViewController.m */,
 				AA82E3C4183F27AC000CB554 /* Reachability.h */,
 				AA82E3C5183F27AC000CB554 /* Reachability.m */,
 				AA82E3C6183F27AC000CB554 /* UIImage+Utility.h */,
@@ -337,6 +342,7 @@
 				AA82E3C9183F27AC000CB554 /* UIImage+Utility.m in Sources */,
 				AAA9EC3E183F2EEF004DF9F8 /* registerViewController.m in Sources */,
 				AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */,
+				AA6404891843165700340BFB /* ChatViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

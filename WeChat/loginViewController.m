@@ -103,6 +103,8 @@
 
 - (void)login
 {
+    NSString *name = [nameInput.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    nameInput.text = name;
     if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""]) {
         UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"Plz input ID and password!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
         [alert show];

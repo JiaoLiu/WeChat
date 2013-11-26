@@ -11,6 +11,7 @@
 #import "UIImage+Utility.h"
 #import <QuartzCore/QuartzCore.h>
 #import <Parse/Parse.h>
+#import "ChatViewController.h"
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -47,7 +48,7 @@
         logout.layer.borderColor = [UIColor lightGrayColor].CGColor;
         logout.backgroundColor = [UIColor grayColor];
         [logout setTitle:@"X" forState:UIControlStateNormal];
-        [logout addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchDown];
+        [logout addTarget:self action:@selector(alertLogout) forControlEvents:UIControlEventTouchDown];
         UIBarButtonItem *logoutBtn = [[[UIBarButtonItem alloc] initWithCustomView:logout] autorelease];
         
         UINavigationItem *navItem = [[[UINavigationItem alloc] init] autorelease];
@@ -60,6 +61,9 @@
         friendlistTable.delegate = self;
         friendlistTable.rowHeight = 60;
         [self.view addSubview:friendlistTable];
+        
+        
+        data = [[NSMutableArray alloc] init];
         
         [self loadFriendData];
     }
@@ -77,6 +81,27 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark - logout
+- (void)alertLogout
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Notice" message:@"Are you sure to logout?" delegate:self cancelButtonTitle:@"Logout" otherButtonTitles:@"Cancel", nil];
+    alert.delegate = self;
+    alert.tag = 100;
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 100) {
+        switch (buttonIndex) {
+            case 0:
+                [self logout];
+                break;    
+            default:
+                break;
+        }
+    }
+}
 
 - (void)logout
 {
@@ -88,16 +113,22 @@
     }];
 }
 
+#pragma mark - LoadUser
 - (void)loadFriendData
 {
     PFQuery *query = [[PFQuery alloc] initWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         [data addObjectsFromArray:objects];
-        NSLog( @"%@",objects);
+        for (int i = 0; i < data.count; i++) {
+            if ([[[data objectAtIndex:i] objectForKey:@"username"] isEqualToString: [PFUser currentUser].username]) {
+                [data removeObjectAtIndex:i];
+            }
+        }
         [friendlistTable reloadData];
     }];
 }
 
+#pragma mark - tableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return data.count;
@@ -107,10 +138,23 @@
 {
     NSString *cellId = [NSString stringWithFormat:@"FrindCell%ld",(long)indexPath.row];
     UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-    UILabel *namelabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH - 20, 40)] autorelease];
+    UILabel *namelabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH - 20, 40)];
     namelabel.text = [[data objectAtIndex:indexPath.row] objectForKey:@"username"];
-    [cell.contentView addSubview:namelabel];
+    [cell addSubview:namelabel];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *user = [[data objectAtIndex:indexPath.row] objectForKey:@"username"];
+    ChatViewController *chatView = [[[ChatViewController alloc] init] autorelease];
+    self.view.alpha = 0;
+    [self presentViewController:chatView animated:YES completion:^{
+        chatView.user = [user retain];
+        [self.view removeFromSuperview];
+    }];
 }
 
 @end
