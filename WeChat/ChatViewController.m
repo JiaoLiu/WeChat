@@ -45,7 +45,6 @@
         title.textAlignment = NSTextAlignmentCenter;
         title.font = [UIFont systemFontOfSize:20];
         title.backgroundColor = [UIColor clearColor];
-        [self performSelector:@selector(setTitle) withObject:nil afterDelay:0.5];
         [nav addSubview:title];
         
         UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -106,7 +105,11 @@
 #pragma mark - loadMsgData
 - (void)loadMsgData
 {
+    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *currentDate = [dateFormatter stringFromDate:[NSDate date]];
     PFQuery *query = [PFQuery queryWithClassName:chatLog];
+    [query whereKey:@"date" hasPrefix:currentDate];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (_data.count != objects.count) {
             [_data removeAllObjects];
@@ -123,9 +126,11 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (![textInput.text isEqualToString:@""]) {
+        NSData *msgData = [textInput.text dataUsingEncoding:NSUTF8StringEncoding];
         PFObject *sendObjects = [PFObject objectWithClassName:chatLog];
-        [sendObjects setObject:textInput.text forKey:@"msg"];
+        [sendObjects setObject:msgData forKey:@"msg"];
         [sendObjects setObject:[PFUser currentUser].username forKey:@"user"];
+        [sendObjects setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
         [sendObjects saveInBackground];
         textInput.text = @"";
         [self loadMsgData];
@@ -225,7 +230,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    CGSize msgSize = [[[_data objectAtIndex:indexPath.row]  objectForKey:@"msg"] sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+    NSString *msgStr = [[NSString alloc] initWithData:[[_data objectAtIndex:indexPath.row] objectForKey:@"msg"] encoding:NSUTF8StringEncoding];
+    CGSize msgSize = [msgStr sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     NSString *cellId = [NSString stringWithFormat:@"MsgCell%ld",(long)indexPath.row];
     ChatCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     
@@ -234,6 +240,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     [cell setData:[_data objectAtIndex:indexPath.row]];
+    
     if ([[_data objectAtIndex:indexPath.row] objectForKey:@"image"] != nil) {
         [cell setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     }
@@ -271,22 +278,18 @@
         sendImage = [info objectForKey:UIImagePickerControllerOriginalImage];
         
         // Resize image
-        UIGraphicsBeginImageContext(CGSizeMake(640, 960));
-        [sendImage drawInRect: CGRectMake(0, 0, 640, 960)];
+        UIGraphicsBeginImageContext(CGSizeMake(120, 160));
+        [sendImage drawInRect: CGRectMake(0, 0, 120, 160)];
         UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
         // Upload image
         NSData *imageData = UIImagePNGRepresentation(smallImage);
-        PFFile *imageFile = [PFFile fileWithName:@"img" data:imageData];
-        [imageFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                PFObject *imageObject = [PFObject objectWithClassName:chatLog];
-                [imageObject setObject:imageFile forKey:@"image"];
-                [imageObject setObject:[PFUser currentUser].username forKey:@"user"];
-                [imageObject saveInBackground];
-            }
-        }];
+        PFObject *imageObject = [PFObject objectWithClassName:chatLog];
+        [imageObject setObject:imageData forKey:@"image"];
+        [imageObject setObject:[PFUser currentUser].username forKey:@"user"];
+        [imageObject setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
+        [imageObject saveInBackground];
         
     }];
 }
@@ -316,8 +319,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self performSelector:@selector(setTitle) withObject:nil afterDelay:0.5];
     timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(loadMsgData) userInfo:nil repeats:YES];
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated
