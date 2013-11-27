@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA44BD1318447F8C0021831C /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA44BD1218447F8C0021831C /* ChatCell.m */; };
+		AA44BD17184491DF0021831C /* imessage-bubble.tiff in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD16184491DF0021831C /* imessage-bubble.tiff */; };
+		AA44BD19184495670021831C /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD18184495670021831C /* camera.png */; };
+		AA44BD201844B6F30021831C /* icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1E1844B6F30021831C /* icon1.png */; };
+		AA44BD211844B6F30021831C /* icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1F1844B6F30021831C /* icon2.png */; };
 		AA6404891843165700340BFB /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6404881843165700340BFB /* ChatViewController.m */; };
 		AA82E38A183F271F000CB554 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E389183F271F000CB554 /* UIKit.framework */; };
 		AA82E38C183F271F000CB554 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38B183F271F000CB554 /* Foundation.framework */; };
@@ -51,6 +56,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA44BD1118447F8C0021831C /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
+		AA44BD1218447F8C0021831C /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
+		AA44BD16184491DF0021831C /* imessage-bubble.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = "imessage-bubble.tiff"; path = "resource/imessage-bubble.tiff"; sourceTree = "<group>"; };
+		AA44BD18184495670021831C /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = resource/camera.png; sourceTree = "<group>"; };
+		AA44BD1E1844B6F30021831C /* icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon1.png; path = resource/icon1.png; sourceTree = "<group>"; };
+		AA44BD1F1844B6F30021831C /* icon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon2.png; path = resource/icon2.png; sourceTree = "<group>"; };
 		AA6404871843165700340BFB /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		AA6404881843165700340BFB /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		AA82E386183F271F000CB554 /* WeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,9 +140,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA44BD15184490BA0021831C /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				AA44BD1E1844B6F30021831C /* icon1.png */,
+				AA44BD1F1844B6F30021831C /* icon2.png */,
+				AA44BD18184495670021831C /* camera.png */,
+				AA44BD16184491DF0021831C /* imessage-bubble.tiff */,
+			);
+			name = resource;
+			sourceTree = "<group>";
+		};
 		AA82E37D183F271F000CB554 = {
 			isa = PBXGroup;
 			children = (
+				AA44BD15184490BA0021831C /* resource */,
 				AA82E38F183F271F000CB554 /* WeChat */,
 				AA82E3B3183F2720000CB554 /* WeChatTests */,
 				AA82E388183F271F000CB554 /* Frameworks */,
@@ -183,6 +206,8 @@
 				AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */,
 				AA6404871843165700340BFB /* ChatViewController.h */,
 				AA6404881843165700340BFB /* ChatViewController.m */,
+				AA44BD1118447F8C0021831C /* ChatCell.h */,
+				AA44BD1218447F8C0021831C /* ChatCell.m */,
 				AA82E3C4183F27AC000CB554 /* Reachability.h */,
 				AA82E3C5183F27AC000CB554 /* Reachability.m */,
 				AA82E3C6183F27AC000CB554 /* UIImage+Utility.h */,
@@ -301,6 +326,10 @@
 				AA82E39E183F271F000CB554 /* Default@2x.png in Resources */,
 				AA82E3A0183F271F000CB554 /* Default-568h@2x.png in Resources */,
 				AA82E3A3183F271F000CB554 /* MainStoryboard.storyboard in Resources */,
+				AA44BD17184491DF0021831C /* imessage-bubble.tiff in Resources */,
+				AA44BD19184495670021831C /* camera.png in Resources */,
+				AA44BD201844B6F30021831C /* icon1.png in Resources */,
+				AA44BD211844B6F30021831C /* icon2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +372,7 @@
 				AAA9EC3E183F2EEF004DF9F8 /* registerViewController.m in Sources */,
 				AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */,
 				AA6404891843165700340BFB /* ChatViewController.m in Sources */,
+				AA44BD1318447F8C0021831C /* ChatCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +433,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chongqing Sijian Technology Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -418,6 +449,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "768A9F8D-A049-4448-9A72-A14659909937";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -433,6 +465,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chongqing Sijian Technology Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -441,6 +474,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "768A9F8D-A049-4448-9A72-A14659909937";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -449,6 +483,7 @@
 		AA82E3BF183F2720000CB554 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -457,6 +492,7 @@
 				GCC_PREFIX_HEADER = "WeChat/WeChat-Prefix.pch";
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -464,6 +500,7 @@
 		AA82E3C0183F2720000CB554 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -472,6 +509,7 @@
 				GCC_PREFIX_HEADER = "WeChat/WeChat-Prefix.pch";
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

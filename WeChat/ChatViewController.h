@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChatViewController : UIViewController <UIAlertViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITableViewDelegate>
+@interface ChatViewController : UIViewController <UIAlertViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSString *user;
 }
