@@ -120,6 +120,7 @@
     PFQuery *query = [PFQuery queryWithClassName:chatLog];
     [query whereKey:@"date" hasPrefix:currentDate];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        //NSLog(@"%d+++%d",_data.count, objects.count);
         if (_data.count != objects.count) {
             [_data removeAllObjects];
             [_data addObjectsFromArray:objects];
@@ -231,7 +232,6 @@
             chatLog = [[NSString stringWithFormat:@"%@_%@",[PFUser currentUser].username,user] retain];
         }
     }];
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(loadMsgData) userInfo:nil repeats:YES];
 }
 
 #pragma mark - tableView delegate
@@ -428,6 +428,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:UIKeyboardWillShowNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDismiss:) name:UIKeyboardWillHideNotification object:nil];
     }
+    [self performSelector:@selector(setTitle) withObject:nil afterDelay:2];
+    chatLog = [[NSString alloc] init];
     _data = [[NSMutableArray alloc] init];
 }
 
@@ -440,8 +442,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self performSelector:@selector(setTitle) withObject:nil afterDelay:0.5];
-    chatLog = [[NSString alloc] init];
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(loadMsgData) userInfo:nil repeats:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
