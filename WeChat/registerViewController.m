@@ -17,11 +17,13 @@
 
 @interface registerViewController ()
 {
-    IBOutlet UITextField *nameInput;
-    IBOutlet UITextField *pswInput;
+    UITextField *nameInput;
+    UITextField *pswInput;
     
-    IBOutlet UIButton *cancelBtn;
-    IBOutlet UIButton *registerBtn;
+    UIButton *cancelBtn;
+    UIButton *registerBtn;
+    
+    UIView *loadingView;
 }
 
 @end
@@ -113,22 +115,25 @@
 {
     NSString *name = [nameInput.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     nameInput.text = name;
-    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""]) {
+    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""] || name == nil) {
         UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"Plz input ID and password!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
         [alert show];
     }
     else
     {
+        [self showLoading];
         PFUser *user = [[PFUser alloc] init];
         user.username = nameInput.text;
         user.password = pswInput.text;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
+                [self dismissLoading];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Congrat" message:@"success to register!" delegate:self cancelButtonTitle:@"Login" otherButtonTitles:@"Cancel", nil];
                 alert.tag = 100;
                 [alert show];
             }
             else {
+                [self dismissLoading];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"fail to register!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil];
                 [alert show];
             }
@@ -147,6 +152,46 @@
             default:
                 break;
         }
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self dismissLoading];
+}
+
+#pragma mark - show Loading
+- (void)showLoading
+{
+    if (!loadingView) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,  60)];
+        loadingView.backgroundColor = [UIColor blackColor];
+        loadingView.alpha = 0.7;
+        loadingView.layer.cornerRadius = 3;
+        [window addSubview:loadingView];
+        
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 60)] autorelease];
+        label.text = @"注册中...";
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [loadingView addSubview:label];
+    }
+}
+
+- (void)dismissLoading
+{
+    if (loadingView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            loadingView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [loadingView removeFromSuperview];
+            [loadingView release];
+            loadingView = nil;
+        }];
+
     }
 }
 

@@ -20,6 +20,8 @@
 {
     UITableView *friendlistTable;
     NSMutableArray *data;
+    
+    UIView *loadingView;
 }
 
 @end
@@ -116,6 +118,7 @@
 #pragma mark - LoadUser
 - (void)loadFriendData
 {
+    [self showLoading];
     PFQuery *query = [[PFQuery alloc] initWithClassName:@"_User"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         [data addObjectsFromArray:objects];
@@ -125,6 +128,7 @@
             }
         }
         [friendlistTable reloadData];
+        [self dismissLoading];
     }];
 }
 
@@ -155,6 +159,45 @@
         chatView.user = [user retain];
         [self.view removeFromSuperview];
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self dismissLoading];
+}
+
+#pragma mark - show Loading
+- (void)showLoading
+{
+    if (!loadingView) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,  60)];
+        loadingView.backgroundColor = [UIColor blackColor];
+        loadingView.alpha = 0.7;
+        loadingView.layer.cornerRadius = 3;
+        [window addSubview:loadingView];
+        
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 60)] autorelease];
+        label.text = @"加载中...";
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [loadingView addSubview:label];
+    }
+}
+
+- (void)dismissLoading
+{
+    if (loadingView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            loadingView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [loadingView removeFromSuperview];
+            [loadingView release];
+            loadingView = nil;
+        }];
+    }
 }
 
 @end

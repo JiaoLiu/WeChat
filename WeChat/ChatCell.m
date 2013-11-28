@@ -26,7 +26,7 @@
 - (void)setData:(NSDictionary *)data
 {
     NSString *msgStr = [[NSString alloc] initWithData:[data objectForKey:@"msg"] encoding:NSUTF8StringEncoding];
-    CGSize msgSize = [msgStr sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize msgSize = [[NSString stringWithFormat:@"我：%@",msgStr] sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     if ([data objectForKey:@"image"] != nil ) {
         [cellFrame setFrame:CGRectMake(0, 10, SCREEN_WIDTH, 160)];
         if ([[data objectForKey:@"user"] isEqualToString:[PFUser currentUser].username]) {
@@ -43,7 +43,7 @@
         [cellFrame setFrame:CGRectMake(0, 10, SCREEN_WIDTH, msgSize.height)];
         if ([[data objectForKey:@"user"] isEqualToString:[PFUser currentUser].username]) {
             [outMsg setFrame:CGRectMake(20, 0, msgSize.width, msgSize.height)];
-            outMsg.text = msgStr;
+            outMsg.text = [NSString stringWithFormat:@"我：%@",msgStr];
             [cellFrame addSubview:outMsg];
         }
         else {

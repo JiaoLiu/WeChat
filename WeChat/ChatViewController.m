@@ -29,8 +29,12 @@
     NSString *chatLog;
     NSMutableArray *_data;
     NSTimer *timer;
+    UILabel *timeLable;
     
     UIImage *sendImage;
+    UIView *sendImageView;
+    
+    UIView *loadingView;
 }
 @synthesize user;
 
@@ -87,7 +91,12 @@
         msgTable.delegate = self;
         msgTable.separatorStyle = UITableViewCellSeparatorStyleNone;
         [self.view addSubview:msgTable];
-        }
+       
+        timeLable = [[UILabel alloc] init];
+        timeLable.textAlignment = NSTextAlignmentCenter;
+        timeLable.textColor = [UIColor blackColor];
+        timeLable.font = [UIFont systemFontOfSize:14];
+    }
     return self;
 }
 
@@ -125,13 +134,18 @@
 #pragma mark - textInput delegate;
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (![textInput.text isEqualToString:@""]) {
+    if (![textInput.text isEqualToString:@""] && ![chatLog isEqualToString:@""]) {
+        [self showLoading];
         NSData *msgData = [textInput.text dataUsingEncoding:NSUTF8StringEncoding];
         PFObject *sendObjects = [PFObject objectWithClassName:chatLog];
         [sendObjects setObject:msgData forKey:@"msg"];
         [sendObjects setObject:[PFUser currentUser].username forKey:@"user"];
         [sendObjects setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
-        [sendObjects saveInBackground];
+        [sendObjects saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (succeeded) {
+                [self dismissLoading];
+            }
+        }];
         textInput.text = @"";
         [self loadMsgData];
     }
@@ -207,14 +221,17 @@
 - (void)setTitle
 {
     title.text = user;
-    chatLog = [[NSString stringWithFormat:@"%@_%@",[PFUser currentUser].username,user] retain];
     NSString *temp = [NSString stringWithFormat:@"%@_%@",user,[PFUser currentUser].username];
     PFQuery *query = [[PFQuery alloc] initWithClassName:temp];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (objects.count != 0) {
             chatLog = [temp retain];
         }
+        else {
+            chatLog = [[NSString stringWithFormat:@"%@_%@",[PFUser currentUser].username,user] retain];
+        }
     }];
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(loadMsgData) userInfo:nil repeats:YES];
 }
 
 #pragma mark - tableView delegate
@@ -231,7 +248,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *msgStr = [[NSString alloc] initWithData:[[_data objectAtIndex:indexPath.row] objectForKey:@"msg"] encoding:NSUTF8StringEncoding];
-    CGSize msgSize = [msgStr sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize msgSize = [[NSString stringWithFormat:@"我：%@",msgStr] sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     NSString *cellId = [NSString stringWithFormat:@"MsgCell%ld",(long)indexPath.row];
     ChatCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     
@@ -275,7 +292,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [picker dismissViewControllerAnimated:YES completion:^{
-        sendImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        sendImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
         
         // Resize image
         UIGraphicsBeginImageContext(CGSizeMake(120, 160));
@@ -283,16 +300,120 @@
         UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        // Upload image
+        /*// Upload image
         NSData *imageData = UIImagePNGRepresentation(smallImage);
         PFObject *imageObject = [PFObject objectWithClassName:chatLog];
         [imageObject setObject:imageData forKey:@"image"];
         [imageObject setObject:[PFUser currentUser].username forKey:@"user"];
         [imageObject setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
-        [imageObject saveInBackground];
-        
+        [imageObject saveInBackground];*/
+        if (!sendImageView) {
+            UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+            sendImageView = [[UIView alloc] initWithFrame:CGRectMake(20, SCREEN_HEIGHT/2 - 120, SCREEN_WIDTH - 40, 240)];
+            sendImageView.alpha = 0.7;
+            sendImageView.layer.cornerRadius = 3;
+            sendImageView.backgroundColor = [UIColor blackColor];
+            [window addSubview:sendImageView];
+            
+            UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(sendImageView.frame.size.width/2 - 60, 10, 120, 160)] autorelease];
+            imageView.image = smallImage;
+            [sendImageView addSubview:imageView];
+            
+            UIButton *sendBtn = [[[UIButton alloc]initWithFrame:CGRectMake(10, 180, sendImageView.frame.size.width/2 - 15, 50)] autorelease];
+            [sendBtn setBackgroundImage:[UIImage generateColorImage:[UIColor greenColor] size:sendBtn.frame.size] forState:UIControlStateNormal];
+            [sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+            sendBtn.layer.cornerRadius = 3;
+            [sendBtn addTarget:self action:@selector(sendImage) forControlEvents:UIControlEventTouchUpInside];
+            [sendImageView addSubview:sendBtn];
+            
+            UIButton *cancelBtn = [[[UIButton alloc]initWithFrame:CGRectMake(sendImageView.frame.size.width/2 + 5, 180, sendImageView.frame.size.width/2 - 15, 50)] autorelease];
+            [cancelBtn setBackgroundImage:[UIImage generateColorImage:[UIColor greenColor] size:sendBtn.frame.size] forState:UIControlStateNormal];
+            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+            cancelBtn.layer.cornerRadius = 3;
+            [cancelBtn addTarget:self action:@selector(dismissSend) forControlEvents:UIControlEventTouchUpInside];
+            [sendImageView addSubview:cancelBtn];
+
+        }
     }];
 }
+
+- (void)sendImage
+{
+    if(sendImageView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            sendImageView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [sendImageView removeFromSuperview];
+            [sendImageView release];
+            sendImageView = nil;
+        }];
+    }
+    // Resize image
+    UIGraphicsBeginImageContext(CGSizeMake(120, 160));
+    [sendImage drawInRect: CGRectMake(0, 0, 120, 160)];
+    UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    // Upload image
+    [self showLoading];
+     NSData *imageData = UIImagePNGRepresentation(smallImage);
+     PFObject *imageObject = [PFObject objectWithClassName:chatLog];
+     [imageObject setObject:imageData forKey:@"image"];
+     [imageObject setObject:[PFUser currentUser].username forKey:@"user"];
+     [imageObject setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
+     [imageObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+         if (succeeded) {
+             [self dismissLoading];
+         }
+     }];
+}
+
+- (void)dismissSend
+{
+    if(sendImageView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            sendImageView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [sendImageView removeFromSuperview];
+            [sendImageView release];
+            sendImageView = nil;
+        }];
+    }
+}
+
+#pragma mark - show Loading
+- (void)showLoading
+{
+    if (!loadingView) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,  60)];
+        loadingView.backgroundColor = [UIColor blackColor];
+        loadingView.alpha = 0.7;
+        loadingView.layer.cornerRadius = 3;
+        [window addSubview:loadingView];
+        
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 60)] autorelease];
+        label.text = @"发送中...";
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [loadingView addSubview:label];
+    }
+}
+
+- (void)dismissLoading
+{
+    if (loadingView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            loadingView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [loadingView removeFromSuperview];
+            [loadingView release];
+            loadingView = nil;
+        }];
+    }
+}
+
 
 #pragma mark - Other
 - (void)viewDidLoad
@@ -320,13 +441,14 @@
 {
     [super viewWillAppear:animated];
     [self performSelector:@selector(setTitle) withObject:nil afterDelay:0.5];
-    timer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(loadMsgData) userInfo:nil repeats:YES];
+    chatLog = [[NSString alloc] init];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [timer invalidate];
+    [self dismissLoading];
 }
 
 -(void)dealloc
@@ -336,6 +458,7 @@
     [textView release];
     [_data release];
     [timer release];
+    [timeLable release];
     chatLog = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];

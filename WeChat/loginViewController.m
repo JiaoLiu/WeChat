@@ -23,6 +23,8 @@
     
     UIButton *loginBtn;
     UIButton *registerBtn;
+    
+    UIView *loadingView;
 }
 
 @end
@@ -105,18 +107,21 @@
 {
     NSString *name = [nameInput.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     nameInput.text = name;
-    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""]) {
+    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""] || name == nil) {
         UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"Plz input ID and password!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
         [alert show];
     }
     else
     {
+        [self showLoading];
         [PFUser logInWithUsernameInBackground:nameInput.text password:pswInput.text block:^(PFUser *user, NSError *error) {
             if (error != nil) {
+                [self dismissLoading];
                 UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"fail to login!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
                 [alert show];
             }
          else {
+             [self dismissLoading];
              self.view.alpha = 0;
              friendlistViewController *listView = [[[friendlistViewController alloc] init] autorelease];
              [self presentViewController:listView animated:YES completion:^{
@@ -143,5 +148,46 @@
     [loginBtn release];
     [registerBtn release];
     [super dealloc];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self dismissLoading];
+    
+}
+
+#pragma mark - show Loading
+- (void)showLoading
+{
+    if (!loadingView) {
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,  60)];
+        loadingView.backgroundColor = [UIColor blackColor];
+        loadingView.alpha = 0.7;
+        loadingView.layer.cornerRadius = 3;
+        [window addSubview:loadingView];
+        
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 60)] autorelease];
+        label.text = @"登录中...";
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [loadingView addSubview:label];
+    }
+}
+
+- (void)dismissLoading
+{
+    if (loadingView) {
+        [UIView animateWithDuration:0.3 animations:^{
+            loadingView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [loadingView removeFromSuperview];
+            [loadingView release];
+            loadingView = nil;
+        }];
+        
+    }
 }
 @end
