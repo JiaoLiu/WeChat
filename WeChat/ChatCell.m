@@ -26,7 +26,7 @@
 - (void)setData:(NSDictionary *)data
 {
     NSString *msgStr = [[NSString alloc] initWithData:[data objectForKey:@"msg"] encoding:NSUTF8StringEncoding];
-    CGSize msgSize = [[NSString stringWithFormat:@"我：%@",msgStr] sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 40, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize msgSize = [msgStr sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 70, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     if ([data objectForKey:@"image"] != nil ) {
         [cellFrame setFrame:CGRectMake(0, 10, SCREEN_WIDTH, 160)];
         if ([[data objectForKey:@"user"] isEqualToString:[PFUser currentUser].username]) {
@@ -42,12 +42,12 @@
     {
         [cellFrame setFrame:CGRectMake(0, 10, SCREEN_WIDTH, msgSize.height)];
         if ([[data objectForKey:@"user"] isEqualToString:[PFUser currentUser].username]) {
-            [outMsg setFrame:CGRectMake(20, 0, msgSize.width, msgSize.height)];
-            outMsg.text = [NSString stringWithFormat:@"我：%@",msgStr];
+            [outMsg setFrame:CGRectMake(60, 0, msgSize.width, msgSize.height)];
+            outMsg.text = msgStr;
             [cellFrame addSubview:outMsg];
         }
         else {
-            [inMsg setFrame:CGRectMake(SCREEN_WIDTH - msgSize.width - 20, 0, msgSize.width, msgSize.height)];
+            [inMsg setFrame:CGRectMake(SCREEN_WIDTH - msgSize.width - 60, 0, msgSize.width, msgSize.height)];
             inMsg.text = msgStr;
             [cellFrame addSubview:inMsg];
         }
@@ -74,8 +74,8 @@
         outMsg.font = [UIFont systemFontOfSize:20];
         outMsg.numberOfLines = 0;
         
-        inImage = [[[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 130, 0, 120, 160)] autorelease];
-        outImage = [[[UIImageView alloc] initWithFrame:CGRectMake(10, 0, 120, 160)] autorelease];
+        inImage = [[[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 180, 0, 120, 160)] autorelease];
+        outImage = [[[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 120, 160)] autorelease];
         
     }
     return self;

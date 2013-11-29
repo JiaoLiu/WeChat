@@ -11,8 +11,10 @@
 @interface ChatViewController : UIViewController <UIAlertViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 {
     NSString *user;
+    NSData *userImageData;
 }
 
 @property (nonatomic, retain) NSString *user;
+@property (nonatomic, retain) NSData *userImageData;
 
 @end

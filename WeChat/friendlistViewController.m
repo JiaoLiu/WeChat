@@ -165,6 +165,7 @@
     self.view.alpha = 0;
     [self presentViewController:chatView animated:YES completion:^{
         chatView.user = [user retain];
+        chatView.userImageData = [[[data objectAtIndex:indexPath.row] objectForKey:@"image"] retain];
         [self.view removeFromSuperview];
     }];
 }

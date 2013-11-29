@@ -42,6 +42,7 @@
 		AA82E3DB183F2A0F000CB554 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */; };
 		AA82E3DD183F2A16000CB554 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */; };
 		AAA9EC3E183F2EEF004DF9F8 /* registerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */; };
+		AACD75E618489F830049F48E /* Mushroom.png in Resources */ = {isa = PBXBuildFile; fileRef = AACD75E518489F830049F48E /* Mushroom.png */; };
 		AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +103,7 @@
 		AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		AAA9EC3C183F2EEF004DF9F8 /* registerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registerViewController.h; sourceTree = "<group>"; };
 		AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = registerViewController.m; sourceTree = "<group>"; };
+		AACD75E518489F830049F48E /* Mushroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Mushroom.png; path = resource/Mushroom.png; sourceTree = "<group>"; };
 		AAD04942183F5CE500FCB3B1 /* friendlistViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = friendlistViewController.h; sourceTree = "<group>"; };
 		AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = friendlistViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -147,6 +149,7 @@
 				AA44BD1F1844B6F30021831C /* icon2.png */,
 				AA44BD18184495670021831C /* camera.png */,
 				AA44BD16184491DF0021831C /* imessage-bubble.tiff */,
+				AACD75E518489F830049F48E /* Mushroom.png */,
 			);
 			name = resource;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				AA44BD19184495670021831C /* camera.png in Resources */,
 				AA44BD201844B6F30021831C /* icon1.png in Resources */,
 				AA44BD211844B6F30021831C /* icon2.png in Resources */,
+				AACD75E618489F830049F48E /* Mushroom.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +495,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeChat/WeChat-Prefix.pch";
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -508,6 +513,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeChat/WeChat-Prefix.pch";
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
