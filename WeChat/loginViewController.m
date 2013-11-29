@@ -77,11 +77,15 @@
     
     queryPwdLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 70, pwdLable.frame.origin.y + pwdLable.frame.size.height + 5, 60, 20)];
     queryPwdLabel.text = @"找回密码";
-    queryPwdLabel.font = [UIFont systemFontOfSize:14];
+    queryPwdLabel.font = [UIFont systemFontOfSize:15];
     queryPwdLabel.textAlignment = NSTextAlignmentRight;
     queryPwdLabel.userInteractionEnabled = YES;
     [queryPwdLabel addGestureRecognizer:tap];
     [self.view addSubview:queryPwdLabel];
+    // 下划线
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, queryPwdLabel.frame.size.height - 1, 60, 1)];
+    line.backgroundColor = [UIColor grayColor];
+    [queryPwdLabel addSubview:line];
     
     loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, queryPwdLabel.frame.origin.y + queryPwdLabel.frame.size.height + 20, SCREEN_WIDTH/2 - 25, 40)];
     [loginBtn setBackgroundImage:[UIImage generateColorImage:[UIColor lightGrayColor] size:loginBtn.frame.size] forState:UIControlStateNormal];
