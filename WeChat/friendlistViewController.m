@@ -144,6 +144,14 @@
     UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     UILabel *namelabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH - 20, 40)];
     namelabel.text = [[data objectAtIndex:indexPath.row] objectForKey:@"username"];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
+    UIImage *icon = [UIImage imageWithData:[[data objectAtIndex:indexPath.row] objectForKey:@"image"]];
+    imageView.image = icon;
+    if (icon != nil) {
+        [namelabel setFrame:CGRectMake(60, 10, SCREEN_WIDTH - 70, 40)];
+        [cell addSubview:imageView];
+    }
+    
     [cell addSubview:namelabel];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

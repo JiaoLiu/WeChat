@@ -19,11 +19,15 @@
 {
     UITextField *nameInput;
     UITextField *pswInput;
+    UITextField *emailInput;
     
     UIButton *cancelBtn;
     UIButton *registerBtn;
     
     UIView *loadingView;
+    
+    UIButton *IDImage;
+    NSData *imageData;
 }
 
 @end
@@ -45,20 +49,22 @@
     UILabel *idLable = [[[UILabel alloc] init] autorelease];
     idLable.frame = CGRectMake(10, Label.frame.origin.y + Label.frame.size.height + 30, 80, 30);
     idLable.text = @"用户名 :";
-    [self.view addSubview:idLable];
+    //[self.view addSubview:idLable];
+    
     nameInput = [[UITextField alloc] initWithFrame:CGRectMake(90, Label.frame.origin.y + Label.frame.size.height + 30, SCREEN_WIDTH - 100, 30)];
     nameInput.layer.borderWidth = 1;
     nameInput.font = [UIFont systemFontOfSize:19];
     nameInput.layer.borderColor = [UIColor grayColor].CGColor;
     nameInput.layer.cornerRadius = 3;
     nameInput.delegate = self;
+    nameInput.placeholder = @" 用户名";
     [self.view addSubview:nameInput];
     
     
     UILabel *pwdLable = [[[UILabel alloc] init] autorelease];
     pwdLable.frame = CGRectMake(10, idLable.frame.origin.y + idLable.frame.size.height + 10, 80, 30);
     pwdLable.text = @"密码 :";
-    [self.view addSubview:pwdLable];
+    //[self.view addSubview:pwdLable];
     
     pswInput = [[UITextField alloc] initWithFrame:CGRectMake(90, pwdLable.frame.origin.y, SCREEN_WIDTH - 100, 30)];
     pswInput.layer.borderWidth = 1;
@@ -67,10 +73,25 @@
     pswInput.layer.cornerRadius = 3;
     pswInput.delegate = self;
     pswInput.secureTextEntry = YES;
+    pswInput.placeholder = @" 密码";
     [self.view addSubview:pswInput];
-
     
-    registerBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, pswInput.frame.origin.y + pswInput.frame.size.height + 30, SCREEN_WIDTH/2 - 25, 40)];
+    UILabel *emailLabel =[[[UILabel alloc] init] autorelease];
+    emailLabel.frame = CGRectMake(10, pwdLable.frame.origin.y + pwdLable.frame.size.height + 10, 80, 30);
+    emailLabel.text = @"Email :";
+    //[self.view addSubview:emailLabel];
+    
+    emailInput = [[UITextField alloc] initWithFrame:CGRectMake(90, emailLabel.frame.origin.y, SCREEN_WIDTH - 100, 30)];
+    emailInput.layer.borderWidth = 1;
+    emailInput.font = [UIFont systemFontOfSize:19];
+    emailInput.layer.borderColor = [UIColor grayColor].CGColor;
+    emailInput.layer.cornerRadius = 3;
+    emailInput.delegate = self;
+    emailInput.placeholder = @" Email";
+    emailInput.keyboardType = UIKeyboardTypeEmailAddress;
+    [self.view addSubview:emailInput];
+    
+    registerBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, emailLabel.frame.origin.y + emailLabel.frame.size.height + 30, SCREEN_WIDTH/2 - 25, 40)];
     [registerBtn setBackgroundImage:[UIImage generateColorImage:[UIColor lightGrayColor] size:registerBtn.frame.size] forState:UIControlStateNormal];
     [registerBtn setTitle:@"注册" forState:UIControlStateNormal];
     [registerBtn setTintColor:[UIColor whiteColor]];
@@ -85,7 +106,14 @@
     [cancelBtn setTintColor:[UIColor whiteColor]];
     cancelBtn.layer.cornerRadius = 3;
     [cancelBtn addTarget:self action:@selector(backToLogin) forControlEvents:UIControlEventTouchDown];
-    [self.view addSubview:cancelBtn];;
+    [self.view addSubview:cancelBtn];
+    
+    IDImage = [[UIButton alloc] initWithFrame:CGRectMake(10, Label.frame.origin.y + Label.frame.size.height + 30, 75, 100)];
+    [IDImage setTitle:@"＋" forState:UIControlStateNormal];
+    [IDImage setBackgroundImage:[UIImage generateColorImage:[UIColor lightGrayColor] size:IDImage.frame.size] forState:UIControlStateNormal];
+    IDImage.titleLabel.font = [UIFont systemFontOfSize:40];
+    [IDImage addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:IDImage];
 	// Do any additional setup after loading the view.
 }
 
@@ -97,6 +125,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
+    [emailInput resignFirstResponder];
     [nameInput resignFirstResponder];
     [pswInput resignFirstResponder];
     return YES;
@@ -115,7 +144,8 @@
 {
     NSString *name = [nameInput.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     nameInput.text = name;
-    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""] || name == nil) {
+    
+    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""] || name == nil || pswInput.text == nil) {
         UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"Plz input ID and password!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
         [alert show];
     }
@@ -125,6 +155,8 @@
         PFUser *user = [[PFUser alloc] init];
         user.username = nameInput.text;
         user.password = pswInput.text;
+        user.email = emailInput.text;
+        user[@"image"] = imageData;
         [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (succeeded) {
                 [self dismissLoading];
@@ -195,11 +227,39 @@
     }
 }
 
+#pragma mark - PickImage
+- (void)pickImage
+{
+    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
+    imagepicker.delegate = self;
+    imagepicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:imagepicker animated:YES completion:^{
+    }];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{
+        UIImage *sendImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
+        // Resize image
+        UIGraphicsBeginImageContext(CGSizeMake(75, 100));
+        [sendImage drawInRect: CGRectMake(0, 0, 75, 100)];
+        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        [IDImage setImage:smallImage forState:UIControlStateNormal];
+        imageData = [UIImagePNGRepresentation(smallImage) retain];
+    }];
+}
+
+
 - (void)dealloc {
     [nameInput release];
     [pswInput release];
+    [emailInput  release];
     [registerBtn release];
     [cancelBtn release];
+    [IDImage release];
+    [imageData release];
     [super dealloc];
 }
 @end

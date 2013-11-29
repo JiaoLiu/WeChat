@@ -21,6 +21,8 @@
     UITextField *nameInput;
     UITextField *pswInput;
     
+    UILabel *queryPwdLabel;
+    
     UIButton *loginBtn;
     UIButton *registerBtn;
     
@@ -70,8 +72,18 @@
     pswInput.secureTextEntry = YES;
     [self.view addSubview:pswInput];
     
+    UITapGestureRecognizer *tap = [[[UITapGestureRecognizer alloc] init] autorelease];
+    [tap addTarget:self action:@selector(queryPwd)];
     
-    loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, pswInput.frame.origin.y + pswInput.frame.size.height + 30, SCREEN_WIDTH/2 - 25, 40)];
+    queryPwdLabel = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 70, pwdLable.frame.origin.y + pwdLable.frame.size.height + 5, 60, 20)];
+    queryPwdLabel.text = @"找回密码";
+    queryPwdLabel.font = [UIFont systemFontOfSize:14];
+    queryPwdLabel.textAlignment = NSTextAlignmentRight;
+    queryPwdLabel.userInteractionEnabled = YES;
+    [queryPwdLabel addGestureRecognizer:tap];
+    [self.view addSubview:queryPwdLabel];
+    
+    loginBtn = [[UIButton alloc] initWithFrame:CGRectMake(20, queryPwdLabel.frame.origin.y + queryPwdLabel.frame.size.height + 20, SCREEN_WIDTH/2 - 25, 40)];
     [loginBtn setBackgroundImage:[UIImage generateColorImage:[UIColor lightGrayColor] size:loginBtn.frame.size] forState:UIControlStateNormal];
     [loginBtn setTitle:@"登录" forState:UIControlStateNormal];
     [loginBtn setTintColor:[UIColor whiteColor]];
@@ -87,7 +99,7 @@
     registerBtn.layer.cornerRadius = 3;
     [registerBtn addTarget:self action:@selector(newRegister) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:registerBtn];
-	// Do any additional setup after loading the view, typically from a nib.
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,7 +119,7 @@
 {
     NSString *name = [nameInput.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     nameInput.text = name;
-    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""] || name == nil) {
+    if ([nameInput.text isEqualToString:@""] || [pswInput.text isEqualToString:@""] || name == nil || pswInput.text == nil) {
         UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"Plz input ID and password!" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
         [alert show];
     }
@@ -147,6 +159,7 @@
     [pswInput release];
     [loginBtn release];
     [registerBtn release];
+    [queryPwdLabel release];
     [super dealloc];
 }
 
@@ -188,6 +201,37 @@
             loadingView = nil;
         }];
         
+    }
+}
+
+#pragma mark - queryPwd
+- (void)queryPwd
+{
+    [nameInput resignFirstResponder];
+    NSString *name = [nameInput.text stringByReplacingOccurrencesOfString:@" " withString:@""];
+    nameInput.text = name;
+    if ([nameInput.text isEqualToString:@""] || name == nil) {
+        UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"Notify" message:@"Plz input ID" delegate:self cancelButtonTitle:@"Dismiss" otherButtonTitles:nil, nil] autorelease];
+        [alert show];
+    }
+    else {
+        PFQuery *query = [[PFQuery alloc] initWithClassName:@"_User"];
+        [query whereKey:@"username" equalTo:name];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (objects.count > 0) {
+                if ([[objects objectAtIndex:0] objectForKey:@"email"]) {
+                    [PFUser requestPasswordResetForEmailInBackground:[[objects objectAtIndex:0] objectForKey:@"email"]];
+                }
+                else {
+                    UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"抱歉" message:@"你没有注册邮箱，所以无法重置密码！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] autorelease];
+                    [alert show];
+                }
+            }
+            else {
+                UIAlertView *alert = [[[UIAlertView alloc] initWithTitle:@"注意" message:@"帐号没注册！" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil] autorelease];
+                [alert show];
+            } 
+        }];
     }
 }
 @end
