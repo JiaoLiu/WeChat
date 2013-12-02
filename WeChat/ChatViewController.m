@@ -12,6 +12,7 @@
 #import "friendlistViewController.h"
 #import <Parse/Parse.h>
 #import "ChatCell.h"
+#import <AVFoundation/AVFoundation.h>
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -26,6 +27,11 @@
     UITextField *textInput;
     UITableView *msgTable;
     
+    UIButton *recordingBtn;
+    UIButton *recordBtn;
+    BOOL isRecording;
+    UIButton *playBtn;
+    
     NSString *chatLog;
     NSMutableArray *_data;
     NSTimer *timer;
@@ -35,6 +41,12 @@
     UIView *sendImageView;
     
     UIView *loadingView;
+    
+    AVAudioPlayer *player;
+    AVAudioRecorder *recorder;
+    NSURL *recordedFile;
+    
+    NSData *voiceData;
 }
 @synthesize user;
 @synthesize userImageData;
@@ -43,6 +55,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        isRecording = NO;
+        
         UINavigationBar *nav = [[[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)] autorelease];
         [nav setBackgroundImage:[UIImage generateColorImage:[UIColor grayColor] size:nav.frame.size] forBarMetrics:UIBarMetricsDefault];
         title = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 70, 5, 140, 30)];
@@ -71,7 +85,7 @@
         textView.backgroundColor = [UIColor lightGrayColor];
         [self.view addSubview:textView];
         
-        textInput = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH - 60, 40)];
+        textInput = [[UITextField alloc] initWithFrame:CGRectMake(50, 10, SCREEN_WIDTH - 100, 40)];
         textInput.layer.cornerRadius = 3;
         textInput.layer.borderColor = [UIColor whiteColor].CGColor;
         textInput.layer.borderWidth = 1;
@@ -81,11 +95,25 @@
         textInput.delegate = self;
         [textView addSubview:textInput];
         
-        UIButton *imageBtn = [[UIButton alloc] initWithFrame:CGRectMake(textInput.frame.origin.x + textInput.frame.size.width + 5, 10, 40, 40)];
+        recordingBtn = [[UIButton alloc] initWithFrame:CGRectMake(50, 10, SCREEN_WIDTH - 100, 40)];
+        [recordingBtn setTitle:@"按住说话" forState:UIControlStateNormal];
+        [recordingBtn setBackgroundImage:[UIImage generateColorImage:[UIColor grayColor] size:recordingBtn.frame.size] forState:UIControlStateNormal];
+        recordingBtn.layer.borderWidth = 1;
+        recordingBtn.layer.borderColor = [UIColor whiteColor].CGColor;
+        [recordingBtn addTarget:self action:@selector(recording) forControlEvents:UIControlEventTouchDown];
+        [recordingBtn addTarget:self action:@selector(sendVoice) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIButton *imageBtn = [[[UIButton alloc] initWithFrame:CGRectMake(textInput.frame.origin.x + textInput.frame.size.width + 5, 10, 40, 40)] autorelease];
         imageBtn.backgroundColor = [UIColor clearColor];
         [imageBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
         [imageBtn addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchDown];
         [textView addSubview:imageBtn];
+        
+        recordBtn = [[UIButton alloc] initWithFrame:CGRectMake(5, 10, 40, 40)];
+        recordBtn.backgroundColor = [UIColor clearColor];
+        [recordBtn setImage:[UIImage imageNamed:@"mic.jpg"] forState:UIControlStateNormal];
+        [recordBtn addTarget:self action:@selector(textOrRecord) forControlEvents:UIControlEventTouchUpInside];
+        [textView addSubview:recordBtn];
         
         msgTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, SCREEN_HEIGHT - 120)];
         msgTable.dataSource = self;
@@ -263,7 +291,12 @@
         [cell setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180)];
     }
     else {
-        [cell setFrame:CGRectMake(0, 0, SCREEN_WIDTH, msgSize.height + 30)];
+        if (msgSize.height != 0) {
+            [cell setFrame:CGRectMake(0, 0, SCREEN_WIDTH, msgSize.height + 30)];
+        }
+        else{
+            [cell setFrame:CGRectMake(0, 0, SCREEN_WIDTH, 60)];
+        }
     }
     
     if ([[[_data objectAtIndex:indexPath.row] objectForKey:@"user"] isEqualToString:[PFUser currentUser].username]) {
@@ -273,6 +306,18 @@
         }
         else imageView.image = [UIImage imageWithData:[[PFUser currentUser] objectForKey:@"image"]];
         [cell addSubview:imageView];
+        
+        if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil) {
+            playBtn = [[UIButton alloc] initWithFrame:CGRectMake(60, 20, 100, 30)];
+            [playBtn setTitle:@"播放" forState:UIControlStateNormal];
+            playBtn.tag = indexPath.row;
+            playBtn.backgroundColor = [UIColor greenColor];
+            playBtn.layer.cornerRadius = 5;
+            playBtn.layer.borderWidth = 1;
+            playBtn.layer.borderColor = [UIColor whiteColor].CGColor;
+            [playBtn addTarget:self action:@selector(playVoice:) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:playBtn];
+        }
     }
     else {
         UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 50, 10, 40, 40)] autorelease];
@@ -281,6 +326,20 @@
         }
         else imageView.image = [UIImage imageWithData:userImageData];
         [cell addSubview:imageView];
+        
+        if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil) {
+            PFFile *voice = [[_data objectAtIndex:indexPath.row] objectForKey:@"voice"];
+            voiceData = [voice.getData retain];
+            playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 160, 20, 100, 30)];
+            [playBtn setTitle:@"播放" forState:UIControlStateNormal];
+            playBtn.tag = indexPath.row;
+            playBtn.backgroundColor = [UIColor blueColor];
+            playBtn.layer.cornerRadius = 5;
+            playBtn.layer.borderWidth = 1;
+            playBtn.layer.borderColor = [UIColor whiteColor].CGColor;
+            [playBtn addTarget:self action:@selector(playVoice:) forControlEvents:UIControlEventTouchUpInside];
+            [cell addSubview:playBtn];
+        }
     }
     
     return cell;
@@ -317,14 +376,7 @@
             [sendImage drawInRect: CGRectMake(0, 0, 120, 160)];
             UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
-            
-        /*// Upload image
-         NSData *imageData = UIImagePNGRepresentation(smallImage);
-         PFObject *imageObject = [PFObject objectWithClassName:chatLog];
-         [imageObject setObject:imageData forKey:@"image"];
-         [imageObject setObject:[PFUser currentUser].username forKey:@"user"];
-         [imageObject setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
-         [imageObject saveInBackground];*/
+        
             if (!sendImageView) {
                 UIWindow *window = [[UIApplication sharedApplication] keyWindow];
                     sendImageView = [[UIView alloc] initWithFrame:CGRectMake(20, SCREEN_HEIGHT/2 - 120, SCREEN_WIDTH -  40, 240)];
@@ -399,6 +451,63 @@
     }   
 }   
 
+#pragma mark - sendVoice
+- (void)textOrRecord
+{
+    if (isRecording)
+    {
+        isRecording = NO;
+        [recordingBtn removeFromSuperview];
+        [textView addSubview:textInput];
+        [recordBtn setImage:[UIImage imageNamed:@"mic.jpg"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        isRecording = YES;
+        [textInput removeFromSuperview];
+        [textView addSubview:recordingBtn];
+        [recordBtn setImage:[UIImage imageNamed:@"Text"] forState:UIControlStateNormal];
+    }
+}
+
+- (void)recording
+{
+    [self viewWillDisappear:YES];
+    recorder = [[AVAudioRecorder alloc] initWithURL:recordedFile settings:nil error:nil];
+    [recorder prepareToRecord];
+    [recorder record];
+    //NSLog(@"%@",[NSData dataWithContentsOfURL:recordedFile]);
+}
+
+- (void)sendVoice
+{
+    [recorder stop];
+    [self showLoading];
+    PFFile *file = [PFFile fileWithData:[NSData dataWithContentsOfURL:recordedFile]];
+    PFObject *voiceObject = [PFObject objectWithClassName:chatLog];
+    [voiceObject setObject:file forKey:@"voice"];
+    [voiceObject setObject:[PFUser currentUser].username forKey:@"user"];
+    [voiceObject setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
+    [voiceObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            [self dismissLoading];
+        }
+        else {
+            [self dismissLoading];
+        }
+    }];
+    [self viewWillAppear:YES];
+}
+
+#pragma mark - playVoice
+- (void)playVoice :(id)sender
+{
+    PFFile *voice = [[_data objectAtIndex:[sender tag]] objectForKey:@"voice"];
+    voiceData = [voice.getData retain];
+    player = [[AVAudioPlayer alloc] initWithData:voiceData error:nil];
+    [player play];
+}
+
 #pragma mark - show Loading 
 - (void)showLoading
 {   
@@ -448,6 +557,16 @@
     [self performSelector:@selector(setTitle) withObject:nil afterDelay:2];
     chatLog = [[NSString alloc] init];
     _data = [[NSMutableArray alloc] init];
+    
+    recordedFile = [[NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingString:@"RecordedFile"]] retain];
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *sessionError;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&sessionError];
+    
+    if(session == nil)
+        NSLog(@"Error creating session: %@", [sessionError description]);
+    else
+        [session setActive:YES error:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -477,6 +596,12 @@
     [_data release];
     [timer release];
     [timeLable release];
+    [recordBtn release];
+    [recordingBtn release];
+    [player release];
+    [recorder release];
+    [playBtn release];
+    recordedFile = nil;
     chatLog = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
