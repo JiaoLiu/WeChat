@@ -57,6 +57,11 @@
     if (self) {
         isRecording = NO;
         
+        //ALLOC GESTURE
+        UITapGestureRecognizer *tapOnScreen = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textInputReturn)] autorelease];
+        [self.view addGestureRecognizer:tapOnScreen];
+        
+        //ADD VIEW ITEMS
         UINavigationBar *nav = [[[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)] autorelease];
         [nav setBackgroundImage:[UIImage generateColorImage:[UIColor grayColor] size:nav.frame.size] forBarMetrics:UIBarMetricsDefault];
         title = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 70, 5, 140, 30)];
@@ -120,11 +125,15 @@
         msgTable.delegate = self;
         msgTable.separatorStyle = UITableViewCellSeparatorStyleNone;
         [self.view addSubview:msgTable];
-       
+        
+        NSDateFormatter *dateFormatter =[[[NSDateFormatter alloc] init] autorelease];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
         timeLable = [[UILabel alloc] init];
         timeLable.textAlignment = NSTextAlignmentCenter;
         timeLable.textColor = [UIColor blackColor];
         timeLable.font = [UIFont systemFontOfSize:14];
+        timeLable.text = [dateFormatter stringFromDate:[NSDate date]];
+        
     }
     return self;
 }
@@ -161,7 +170,12 @@
     }];
 }
 
-#pragma mark - textInput delegate;
+#pragma mark - textInput delegate
+- (void)textInputReturn
+{
+    [textInput resignFirstResponder];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (![textInput.text isEqualToString:@""] && ![chatLog isEqualToString:@""]) {
@@ -355,7 +369,13 @@
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     return cell.frame.size.height;
 }
-    
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    msgTable.tableHeaderView = timeLable;
+    return timeLable;
+}
+
 #pragma mark - PickImage
 - (void)pickImage
 {   
@@ -460,6 +480,7 @@
         [recordingBtn removeFromSuperview];
         [textView addSubview:textInput];
         [recordBtn setImage:[UIImage imageNamed:@"mic.jpg"] forState:UIControlStateNormal];
+        [textInput becomeFirstResponder];
     }
     else
     {
