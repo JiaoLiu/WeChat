@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AA44BD1318447F8C0021831C /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA44BD1218447F8C0021831C /* ChatCell.m */; };
-		AA44BD19184495670021831C /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD18184495670021831C /* camera.png */; };
 		AA44BD201844B6F30021831C /* icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1E1844B6F30021831C /* icon1.png */; };
 		AA44BD211844B6F30021831C /* icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1F1844B6F30021831C /* icon2.png */; };
 		AA6404891843165700340BFB /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6404881843165700340BFB /* ChatViewController.m */; };
@@ -40,10 +39,13 @@
 		AA82E3D9183F2A07000CB554 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3D8183F2A07000CB554 /* CoreLocation.framework */; };
 		AA82E3DB183F2A0F000CB554 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */; };
 		AA82E3DD183F2A16000CB554 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */; };
+		AA88AFDB184DA3310088B4D0 /* camera.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA88AFDA184DA3310088B4D0 /* camera.jpg */; };
+		AA88AFDD184DA4990088B4D0 /* image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA88AFDC184DA4990088B4D0 /* image.jpg */; };
+		AA88AFE0184DB0AA0088B4D0 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = AA88AFDE184DB0AA0088B4D0 /* back.png */; };
+		AA88AFE1184DB0AA0088B4D0 /* logout.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA88AFDF184DB0AA0088B4D0 /* logout.jpg */; };
 		AA8E9BB7184C696A0049D974 /* mic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA8E9BB6184C696A0049D974 /* mic.jpg */; };
 		AA8E9BB9184C6B5F0049D974 /* Text.png in Resources */ = {isa = PBXBuildFile; fileRef = AA8E9BB8184C6B5F0049D974 /* Text.png */; };
 		AA8E9BBB184C6EC00049D974 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA8E9BBA184C6EC00049D974 /* AVFoundation.framework */; };
-		AA8E9BBD184C86910049D974 /* speech.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AA8E9BBC184C86910049D974 /* speech.jpg */; };
 		AAA9EC3E183F2EEF004DF9F8 /* registerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */; };
 		AACD75E618489F830049F48E /* Mushroom.png in Resources */ = {isa = PBXBuildFile; fileRef = AACD75E518489F830049F48E /* Mushroom.png */; };
 		AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAD04943183F5CE500FCB3B1 /* friendlistViewController.m */; };
@@ -62,7 +64,6 @@
 /* Begin PBXFileReference section */
 		AA44BD1118447F8C0021831C /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		AA44BD1218447F8C0021831C /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
-		AA44BD18184495670021831C /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera.png; path = resource/camera.png; sourceTree = "<group>"; };
 		AA44BD1E1844B6F30021831C /* icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon1.png; path = resource/icon1.png; sourceTree = "<group>"; };
 		AA44BD1F1844B6F30021831C /* icon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon2.png; path = resource/icon2.png; sourceTree = "<group>"; };
 		AA6404871843165700340BFB /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
@@ -103,10 +104,13 @@
 		AA82E3D8183F2A07000CB554 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		AA88AFDA184DA3310088B4D0 /* camera.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = camera.jpg; path = resource/camera.jpg; sourceTree = "<group>"; };
+		AA88AFDC184DA4990088B4D0 /* image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image.jpg; path = resource/image.jpg; sourceTree = "<group>"; };
+		AA88AFDE184DB0AA0088B4D0 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = resource/back.png; sourceTree = "<group>"; };
+		AA88AFDF184DB0AA0088B4D0 /* logout.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = logout.jpg; path = resource/logout.jpg; sourceTree = "<group>"; };
 		AA8E9BB6184C696A0049D974 /* mic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = mic.jpg; path = resource/mic.jpg; sourceTree = "<group>"; };
 		AA8E9BB8184C6B5F0049D974 /* Text.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Text.png; path = resource/Text.png; sourceTree = "<group>"; };
 		AA8E9BBA184C6EC00049D974 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		AA8E9BBC184C86910049D974 /* speech.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = speech.jpg; path = resource/speech.jpg; sourceTree = "<group>"; };
 		AAA9EC3C183F2EEF004DF9F8 /* registerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = registerViewController.h; sourceTree = "<group>"; };
 		AAA9EC3D183F2EEF004DF9F8 /* registerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = registerViewController.m; sourceTree = "<group>"; };
 		AACD75E518489F830049F48E /* Mushroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Mushroom.png; path = resource/Mushroom.png; sourceTree = "<group>"; };
@@ -154,11 +158,13 @@
 			children = (
 				AA44BD1E1844B6F30021831C /* icon1.png */,
 				AA44BD1F1844B6F30021831C /* icon2.png */,
-				AA44BD18184495670021831C /* camera.png */,
 				AACD75E518489F830049F48E /* Mushroom.png */,
 				AA8E9BB6184C696A0049D974 /* mic.jpg */,
 				AA8E9BB8184C6B5F0049D974 /* Text.png */,
-				AA8E9BBC184C86910049D974 /* speech.jpg */,
+				AA88AFDA184DA3310088B4D0 /* camera.jpg */,
+				AA88AFDC184DA4990088B4D0 /* image.jpg */,
+				AA88AFDE184DB0AA0088B4D0 /* back.png */,
+				AA88AFDF184DB0AA0088B4D0 /* logout.jpg */,
 			);
 			name = resource;
 			sourceTree = "<group>";
@@ -339,13 +345,15 @@
 				AA82E39E183F271F000CB554 /* Default@2x.png in Resources */,
 				AA82E3A0183F271F000CB554 /* Default-568h@2x.png in Resources */,
 				AA82E3A3183F271F000CB554 /* MainStoryboard.storyboard in Resources */,
-				AA44BD19184495670021831C /* camera.png in Resources */,
 				AA44BD201844B6F30021831C /* icon1.png in Resources */,
 				AA44BD211844B6F30021831C /* icon2.png in Resources */,
 				AACD75E618489F830049F48E /* Mushroom.png in Resources */,
 				AA8E9BB7184C696A0049D974 /* mic.jpg in Resources */,
 				AA8E9BB9184C6B5F0049D974 /* Text.png in Resources */,
-				AA8E9BBD184C86910049D974 /* speech.jpg in Resources */,
+				AA88AFDB184DA3310088B4D0 /* camera.jpg in Resources */,
+				AA88AFDD184DA4990088B4D0 /* image.jpg in Resources */,
+				AA88AFE0184DB0AA0088B4D0 /* back.png in Resources */,
+				AA88AFE1184DB0AA0088B4D0 /* logout.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

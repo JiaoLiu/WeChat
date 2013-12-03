@@ -45,12 +45,9 @@
         
         UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
         logout.frame = CGRectMake(0, 5, 30, 30);
-        logout.layer.borderWidth = 1;
-        logout.layer.cornerRadius = 10;
-        logout.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        logout.backgroundColor = [UIColor grayColor];
-        [logout setTitle:@"X" forState:UIControlStateNormal];
-        [logout addTarget:self action:@selector(alertLogout) forControlEvents:UIControlEventTouchDown];
+        [logout setImage:[UIImage imageNamed:@"logout.jpg"] forState:UIControlStateNormal];
+        logout.backgroundColor = [UIColor clearColor];
+        [logout addTarget:self action:@selector(alertLogout) forControlEvents:UIControlEventTouchUpInside];
         UIBarButtonItem *logoutBtn = [[[UIBarButtonItem alloc] initWithCustomView:logout] autorelease];
         
         UINavigationItem *navItem = [[[UINavigationItem alloc] init] autorelease];

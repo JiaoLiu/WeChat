@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface registerViewController : UIViewController <UITextFieldDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface registerViewController : UIViewController <UITextFieldDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate>
 
 @end

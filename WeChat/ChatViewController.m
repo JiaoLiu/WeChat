@@ -31,6 +31,7 @@
     UIButton *recordBtn;
     BOOL isRecording;
     UIButton *playBtn;
+    UIButton *cameraBtn;
     
     NSString *chatLog;
     NSMutableArray *_data;
@@ -71,18 +72,23 @@
         title.backgroundColor = [UIColor clearColor];
         [nav addSubview:title];
         
-        UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
-        logout.frame = CGRectMake(0, 5, 30, 30);
-        logout.layer.borderWidth = 1;
-        logout.layer.cornerRadius = 10;
-        logout.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        logout.backgroundColor = [UIColor grayColor];
-        [logout setTitle:@"<" forState:UIControlStateNormal];
-        [logout addTarget:self action:@selector(backToPrev) forControlEvents:UIControlEventTouchDown];
-        UIBarButtonItem *logoutBtn = [[[UIBarButtonItem alloc] initWithCustomView:logout] autorelease];
+        UIButton *back = [UIButton buttonWithType:UIButtonTypeCustom];
+        back.frame = CGRectMake(0, 5, 30, 30);
+        [back setImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
+        back.backgroundColor = [UIColor clearColor];
+        [back addTarget:self action:@selector(backToPrev) forControlEvents:UIControlEventTouchUpInside];
+        
+        cameraBtn = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)] autorelease];
+        [cameraBtn setImage:[UIImage imageNamed:@"camera.jpg"] forState:UIControlStateNormal];
+        cameraBtn.backgroundColor = [UIColor clearColor];
+        [cameraBtn addTarget:self action:@selector(cameraCapture) forControlEvents:UIControlEventTouchUpInside];
+        
+        UIBarButtonItem *backBtn = [[[UIBarButtonItem alloc] initWithCustomView:back] autorelease];
+        UIBarButtonItem *cameraItem = [[[UIBarButtonItem alloc] initWithCustomView:cameraBtn] autorelease];
         
         UINavigationItem *navItem = [[[UINavigationItem alloc] init] autorelease];
-        navItem.leftBarButtonItem = logoutBtn;
+        navItem.leftBarButtonItem = backBtn;
+        navItem.rightBarButtonItem = cameraItem;
         [nav pushNavigationItem:navItem animated:NO];
         [self.view addSubview:nav];
         
@@ -110,8 +116,8 @@
         
         UIButton *imageBtn = [[[UIButton alloc] initWithFrame:CGRectMake(textInput.frame.origin.x + textInput.frame.size.width + 5, 10, 40, 40)] autorelease];
         imageBtn.backgroundColor = [UIColor clearColor];
-        [imageBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
-        [imageBtn addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchDown];
+        [imageBtn setImage:[UIImage imageNamed:@"image.jpg"] forState:UIControlStateNormal];
+        [imageBtn addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchUpInside];
         [textView addSubview:imageBtn];
         
         recordBtn = [[UIButton alloc] initWithFrame:CGRectMake(5, 10, 40, 40)];
@@ -377,6 +383,15 @@
 }
 
 #pragma mark - PickImage
+- (void)cameraCapture
+{
+    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
+    imagepicker.delegate = self;
+    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:imagepicker animated:YES completion:^{
+    }];
+}
+
 - (void)pickImage
 {   
     UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];

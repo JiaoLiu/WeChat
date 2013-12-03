@@ -112,7 +112,7 @@
     [IDImage setTitle:@"＋" forState:UIControlStateNormal];
     [IDImage setBackgroundImage:[UIImage generateColorImage:[UIColor lightGrayColor] size:IDImage.frame.size] forState:UIControlStateNormal];
     IDImage.titleLabel.font = [UIFont systemFontOfSize:40];
-    [IDImage addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchUpInside];
+    [IDImage addTarget:self action:@selector(showSheet:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:IDImage];
 	// Do any additional setup after loading the view.
 }
@@ -228,6 +228,33 @@
 }
 
 #pragma mark - PickImage
+- (void)showSheet :(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Photos", @"Camera", nil];
+    actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    [actionSheet showInView:self.view];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [self pickImage];
+    }
+    if (buttonIndex == 1) {
+        [self cameraCapture];
+    }
+}
+
+- (void)cameraCapture
+{
+    UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
+    imagepicker.delegate = self;
+    imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagepicker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+    [self presentViewController:imagepicker animated:YES completion:^{
+    }];
+}
+
 - (void)pickImage
 {
     UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
