@@ -114,6 +114,8 @@
     IDImage.titleLabel.font = [UIFont systemFontOfSize:40];
     [IDImage addTarget:self action:@selector(showSheet:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:IDImage];
+    
+    imageData = [[NSData alloc] init];
 	// Do any additional setup after loading the view.
 }
 
