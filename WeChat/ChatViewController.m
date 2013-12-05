@@ -297,7 +297,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *msgStr = [[NSString alloc] initWithData:[[_data objectAtIndex:indexPath.row] objectForKey:@"msg"] encoding:NSUTF8StringEncoding];
-    CGSize msgSize = [msgStr sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 70, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize msgSize = [msgStr sizeWithFont:[UIFont systemFontOfSize:17] constrainedToSize:CGSizeMake(SCREEN_WIDTH - 70, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
     NSString *cellId = [NSString stringWithFormat:@"MsgCell%ld",(long)indexPath.row];
     ChatCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     
@@ -320,8 +320,8 @@
     }
     
     if ([[[_data objectAtIndex:indexPath.row] objectForKey:@"user"] isEqualToString:[PFUser currentUser].username]) {
-        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)] autorelease];
-        if ([[PFUser currentUser] objectForKey:@"image"] == nil) {
+        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(10, cell.frame.size.height - 45, 40, 40)] autorelease];
+        if ([[PFUser currentUser] objectForKey:@"image"] == nil || [[[PFUser currentUser] objectForKey:@"image"] isEqualToData:[NSData dataWithBytes:nil length:0]]) {
             imageView.image = [UIImage imageNamed:@"Mushroom"];
         }
         else imageView.image = [UIImage imageWithData:[[PFUser currentUser] objectForKey:@"image"]];
@@ -340,8 +340,8 @@
         }
     }
     else {
-        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 50, 10, 40, 40)] autorelease];
-        if (userImageData == nil) {
+        UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 50, cell.frame.size.height - 45, 40, 40)] autorelease];
+        if (userImageData == nil || [userImageData isEqualToData:[NSData dataWithBytes:nil length:0]]) {
             imageView.image = [UIImage imageNamed:@"Mushroom"];
         }
         else imageView.image = [UIImage imageWithData:userImageData];

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA42F46D18506CD90020252B /* bubbleMine.png in Resources */ = {isa = PBXBuildFile; fileRef = AA42F46918506CD90020252B /* bubbleMine.png */; };
+		AA42F46E18506CD90020252B /* bubbleMine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA42F46A18506CD90020252B /* bubbleMine@2x.png */; };
+		AA42F46F18506CD90020252B /* bubbleSomeone.png in Resources */ = {isa = PBXBuildFile; fileRef = AA42F46B18506CD90020252B /* bubbleSomeone.png */; };
+		AA42F47018506CD90020252B /* bubbleSomeone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA42F46C18506CD90020252B /* bubbleSomeone@2x.png */; };
 		AA44BD1318447F8C0021831C /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA44BD1218447F8C0021831C /* ChatCell.m */; };
 		AA44BD201844B6F30021831C /* icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1E1844B6F30021831C /* icon1.png */; };
 		AA44BD211844B6F30021831C /* icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1F1844B6F30021831C /* icon2.png */; };
@@ -62,6 +66,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AA42F46918506CD90020252B /* bubbleMine.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bubbleMine.png; path = resource/bubbleMine.png; sourceTree = "<group>"; };
+		AA42F46A18506CD90020252B /* bubbleMine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bubbleMine@2x.png"; path = "resource/bubbleMine@2x.png"; sourceTree = "<group>"; };
+		AA42F46B18506CD90020252B /* bubbleSomeone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bubbleSomeone.png; path = resource/bubbleSomeone.png; sourceTree = "<group>"; };
+		AA42F46C18506CD90020252B /* bubbleSomeone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bubbleSomeone@2x.png"; path = "resource/bubbleSomeone@2x.png"; sourceTree = "<group>"; };
 		AA44BD1118447F8C0021831C /* ChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatCell.h; sourceTree = "<group>"; };
 		AA44BD1218447F8C0021831C /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		AA44BD1E1844B6F30021831C /* icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon1.png; path = resource/icon1.png; sourceTree = "<group>"; };
@@ -165,6 +173,10 @@
 				AA88AFDC184DA4990088B4D0 /* image.jpg */,
 				AA88AFDE184DB0AA0088B4D0 /* back.png */,
 				AA88AFDF184DB0AA0088B4D0 /* logout.jpg */,
+				AA42F46918506CD90020252B /* bubbleMine.png */,
+				AA42F46A18506CD90020252B /* bubbleMine@2x.png */,
+				AA42F46B18506CD90020252B /* bubbleSomeone.png */,
+				AA42F46C18506CD90020252B /* bubbleSomeone@2x.png */,
 			);
 			name = resource;
 			sourceTree = "<group>";
@@ -354,6 +366,10 @@
 				AA88AFDD184DA4990088B4D0 /* image.jpg in Resources */,
 				AA88AFE0184DB0AA0088B4D0 /* back.png in Resources */,
 				AA88AFE1184DB0AA0088B4D0 /* logout.jpg in Resources */,
+				AA42F46D18506CD90020252B /* bubbleMine.png in Resources */,
+				AA42F46E18506CD90020252B /* bubbleMine@2x.png in Resources */,
+				AA42F46F18506CD90020252B /* bubbleSomeone.png in Resources */,
+				AA42F47018506CD90020252B /* bubbleSomeone@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
