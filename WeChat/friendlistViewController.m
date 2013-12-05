@@ -22,6 +22,7 @@
     NSMutableArray *data;
     
     UIView *loadingView;
+    NSMutableDictionary *dic;
 }
 
 @end
@@ -55,7 +56,7 @@
         [nav pushNavigationItem:navItem animated:NO];
         [self.view addSubview:nav];
         
-        friendlistTable = [[[UITableView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, SCREEN_HEIGHT - 40)] autorelease];
+        friendlistTable = [[[UITableView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, SCREEN_HEIGHT - 60)] autorelease];
         friendlistTable.dataSource = self;
         friendlistTable.delegate = self;
         friendlistTable.rowHeight = 60;
@@ -80,6 +81,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self dismissLoading];
+}
+
 #pragma mark - logout
 - (void)alertLogout
 {
@@ -117,6 +125,7 @@
 {
     [self showLoading];
     PFQuery *query = [[PFQuery alloc] initWithClassName:@"_User"];
+    [query addAscendingOrder:@"username"];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         [data addObjectsFromArray:objects];
         for (int i = 0; i < data.count; i++) {
@@ -124,15 +133,49 @@
                 [data removeObjectAtIndex:i];
             }
         }
+        // 按A-Z分组
+        dic = [[[NSMutableDictionary alloc] init] autorelease];
+        for (int i = 0; i < 26; i ++) {
+            NSMutableArray *temp = [[[NSMutableArray alloc] init] autorelease];
+            for (int j = 0; j < data.count; j ++ ) {
+                const char *cstr = [[[data objectAtIndex:j] objectForKey:@"username"] UTF8String];
+                if (cstr[0] == 'A' + i || cstr [0] == 'a' + i) {
+                    [temp addObject:[data objectAtIndex:j]];
+                }
+                [temp retain];
+            }
+            [dic setObject:temp forKey:[NSString stringWithFormat:@"%c",'A' + i]];
+            [dic retain];
+        }
+        // 分＃组
+        NSMutableArray *temp = [[[NSMutableArray alloc] init] autorelease];
+        for (int i = 0; i < data.count; i ++) {
+            const char *cstr = [[[data objectAtIndex:i] objectForKey:@"username"] UTF8String];
+            if (!((cstr[0] >= 'A' && cstr [0] <= 'Z') || (cstr[0] >= 'a' && cstr [0] <= 'z'))) {
+                [temp addObject:[data objectAtIndex:i]];
+            }
+            [temp retain];
+        }
+        [dic setObject:temp forKey:@"#"];
+        [dic retain];
+    
         [friendlistTable reloadData];
         [self dismissLoading];
     }];
 }
 
 #pragma mark - tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 27;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return data.count;
+    if (section == 26) {
+        return [[dic objectForKey:@"#"] count];
+    }
+    return [[dic objectForKey:[NSString stringWithFormat:@"%c",'A' + section]] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -140,9 +183,23 @@
     NSString *cellId = [NSString stringWithFormat:@"FrindCell%ld",(long)indexPath.row];
     UITableViewCell * cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     UILabel *namelabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, SCREEN_WIDTH - 20, 40)];
-    namelabel.text = [[data objectAtIndex:indexPath.row] objectForKey:@"username"];
+    //namelabel.text = [[data objectAtIndex:indexPath.row] objectForKey:@"username"];
+    if (indexPath.section == 26) {
+        namelabel.text = [[[dic objectForKey:@"#"] objectAtIndex:indexPath.row] objectForKey:@"username"];
+    }
+    else {
+        namelabel.text = [[[dic objectForKey:[NSString stringWithFormat:@"%c",'A' + indexPath.section]] objectAtIndex:indexPath.row] objectForKey:@"username"];
+    }
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
-    UIImage *icon = [UIImage imageWithData:[[data objectAtIndex:indexPath.row] objectForKey:@"image"]];
+    //UIImage *icon = [UIImage imageWithData:[[data objectAtIndex:indexPath.row] objectForKey:@"image"]];
+    UIImage *icon = [[[UIImage alloc] init] autorelease];
+    if (indexPath.section == 26) {
+        icon = [UIImage imageWithData:[[[dic objectForKey:@"#"] objectAtIndex:indexPath.row] objectForKey:@"image"]];
+    }
+    else
+    {
+        icon = [UIImage imageWithData:[[[dic objectForKey:[NSString stringWithFormat:@"%c",'A' + indexPath.section]] objectAtIndex:indexPath.row] objectForKey:@"image"]];
+    }
     imageView.image = icon;
     if (icon != nil) {
         [namelabel setFrame:CGRectMake(60, 10, SCREEN_WIDTH - 70, 40)];
@@ -157,20 +214,41 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *user = [[data objectAtIndex:indexPath.row] objectForKey:@"username"];
+    NSString *user = [[[NSString alloc] init] autorelease];
+    NSData *imageData = [[[NSData alloc] init] autorelease];
+    if (indexPath.section == 26) {
+        user = [[[dic objectForKey:@"#"] objectAtIndex:indexPath.row] objectForKey:@"username"];
+        imageData = [[[dic objectForKey:@"#"] objectAtIndex:indexPath.row] objectForKey:@"image"];
+    }
+    else
+    {
+        user = [[[dic objectForKey:[NSString stringWithFormat:@"%c",'A' + indexPath.section]] objectAtIndex:indexPath.row] objectForKey:@"username"];
+        imageData = [[[dic objectForKey:[NSString stringWithFormat:@"%c",'A' + indexPath.section]] objectAtIndex:indexPath.row] objectForKey:@"image"];
+    }
+    
     ChatViewController *chatView = [[[ChatViewController alloc] init] autorelease];
     self.view.alpha = 0;
     [self presentViewController:chatView animated:YES completion:^{
         chatView.user = [user retain];
-        chatView.userImageData = [[[data objectAtIndex:indexPath.row] objectForKey:@"image"] retain];
+        chatView.userImageData = [imageData retain];
         [self.view removeFromSuperview];
     }];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (NSArray*)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
-    [super viewWillDisappear:animated];
-    [self dismissLoading];
+    NSMutableArray *charArray = [NSMutableArray array];
+    for (int i = 0; i < 26; i++) {
+        char c = 65 + i;
+        NSString* s = [NSString stringWithFormat:@"%c", c];
+        s = [s uppercaseString];
+        
+        [charArray addObject:s];
+    }
+    
+    [charArray addObject:@"#"];
+    
+    return [NSArray arrayWithArray:charArray];
 }
 
 #pragma mark - show Loading
