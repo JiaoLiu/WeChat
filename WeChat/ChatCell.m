@@ -69,27 +69,27 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        cellFrame = [[[UIView alloc] init] autorelease];
+        cellFrame = [[UIView alloc] init] ;
         [self addSubview:cellFrame];
         
-        inMsg = [[[UILabel alloc] init] autorelease];
+        inMsg = [[UILabel alloc] init] ;
         [inMsg setTextAlignment:NSTextAlignmentLeft];
         inMsg.font = [UIFont systemFontOfSize:17];
         inMsg.textColor = [UIColor blueColor];
         inMsg.backgroundColor = [UIColor clearColor];
         inMsg.numberOfLines = 0;
         
-        outMsg = [[[UILabel alloc] init] autorelease];
+        outMsg = [[UILabel alloc] init] ;
         outMsg.textColor = [UIColor grayColor];
         [outMsg setTextAlignment:NSTextAlignmentLeft];
         outMsg.font = [UIFont systemFontOfSize:17];
         outMsg.backgroundColor = [UIColor clearColor];
         outMsg.numberOfLines = 0;
         
-        inImage = [[[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 180, 0, 120, 160)] autorelease];
-        outImage = [[[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 120, 160)] autorelease];
+        inImage = [[UIImageView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 180, 0, 120, 160)];
+        outImage = [[UIImageView alloc] initWithFrame:CGRectMake(60, 0, 120, 160)];
         
-        bubbleImage = [[[UIImageView alloc] init] autorelease];
+        bubbleImage = [[UIImageView alloc] init] ;
         
     }
     return self;
@@ -99,5 +99,16 @@
 {
     [super setSelected:selected animated:animated];
     // Configure the view for the selected state
-}   
+}
+
+- (void)dealloc
+{
+    [super dealloc];
+    [cellFrame release];
+    [inMsg release];
+    [outMsg release];
+    [inImage release];
+    [outImage release];
+    [bubbleImage release];
+}
 @end

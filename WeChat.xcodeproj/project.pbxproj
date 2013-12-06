@@ -14,6 +14,15 @@
 		AA44BD1318447F8C0021831C /* ChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AA44BD1218447F8C0021831C /* ChatCell.m */; };
 		AA44BD201844B6F30021831C /* icon1.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1E1844B6F30021831C /* icon1.png */; };
 		AA44BD211844B6F30021831C /* icon2.png in Resources */ = {isa = PBXBuildFile; fileRef = AA44BD1F1844B6F30021831C /* icon2.png */; };
+		AA54EDF71851772100BF6074 /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = AA54EDED1851772100BF6074 /* EGORefreshTableHeaderView.m */; };
+		AA54EDF81851772100BF6074 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDEF1851772100BF6074 /* blackArrow.png */; };
+		AA54EDF91851772100BF6074 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF01851772100BF6074 /* blackArrow@2x.png */; };
+		AA54EDFA1851772100BF6074 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF11851772100BF6074 /* blueArrow.png */; };
+		AA54EDFB1851772100BF6074 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF21851772100BF6074 /* blueArrow@2x.png */; };
+		AA54EDFC1851772100BF6074 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF31851772100BF6074 /* grayArrow.png */; };
+		AA54EDFD1851772100BF6074 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF41851772100BF6074 /* grayArrow@2x.png */; };
+		AA54EDFE1851772100BF6074 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF51851772100BF6074 /* whiteArrow.png */; };
+		AA54EDFF1851772100BF6074 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF61851772100BF6074 /* whiteArrow@2x.png */; };
 		AA6404891843165700340BFB /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6404881843165700340BFB /* ChatViewController.m */; };
 		AA82E38A183F271F000CB554 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E389183F271F000CB554 /* UIKit.framework */; };
 		AA82E38C183F271F000CB554 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38B183F271F000CB554 /* Foundation.framework */; };
@@ -74,6 +83,16 @@
 		AA44BD1218447F8C0021831C /* ChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatCell.m; sourceTree = "<group>"; };
 		AA44BD1E1844B6F30021831C /* icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon1.png; path = resource/icon1.png; sourceTree = "<group>"; };
 		AA44BD1F1844B6F30021831C /* icon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon2.png; path = resource/icon2.png; sourceTree = "<group>"; };
+		AA54EDEC1851772100BF6074 /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
+		AA54EDED1851772100BF6074 /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
+		AA54EDEF1851772100BF6074 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
+		AA54EDF01851772100BF6074 /* blackArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackArrow@2x.png"; sourceTree = "<group>"; };
+		AA54EDF11851772100BF6074 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
+		AA54EDF21851772100BF6074 /* blueArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueArrow@2x.png"; sourceTree = "<group>"; };
+		AA54EDF31851772100BF6074 /* grayArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayArrow.png; sourceTree = "<group>"; };
+		AA54EDF41851772100BF6074 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
+		AA54EDF51851772100BF6074 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
+		AA54EDF61851772100BF6074 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
 		AA6404871843165700340BFB /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		AA6404881843165700340BFB /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		AA82E386183F271F000CB554 /* WeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -181,6 +200,47 @@
 			name = resource;
 			sourceTree = "<group>";
 		};
+		AA54EDE91851772100BF6074 /* EGOTableViewPullRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				AA54EDEA1851772100BF6074 /* Classes */,
+				AA54EDEE1851772100BF6074 /* Resources */,
+			);
+			path = EGOTableViewPullRefresh;
+			sourceTree = "<group>";
+		};
+		AA54EDEA1851772100BF6074 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				AA54EDEB1851772100BF6074 /* View */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		AA54EDEB1851772100BF6074 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				AA54EDEC1851772100BF6074 /* EGORefreshTableHeaderView.h */,
+				AA54EDED1851772100BF6074 /* EGORefreshTableHeaderView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		AA54EDEE1851772100BF6074 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AA54EDEF1851772100BF6074 /* blackArrow.png */,
+				AA54EDF01851772100BF6074 /* blackArrow@2x.png */,
+				AA54EDF11851772100BF6074 /* blueArrow.png */,
+				AA54EDF21851772100BF6074 /* blueArrow@2x.png */,
+				AA54EDF31851772100BF6074 /* grayArrow.png */,
+				AA54EDF41851772100BF6074 /* grayArrow@2x.png */,
+				AA54EDF51851772100BF6074 /* whiteArrow.png */,
+				AA54EDF61851772100BF6074 /* whiteArrow@2x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		AA82E37D183F271F000CB554 = {
 			isa = PBXGroup;
 			children = (
@@ -204,6 +264,7 @@
 		AA82E388183F271F000CB554 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA54EDE91851772100BF6074 /* EGOTableViewPullRefresh */,
 				AA8E9BBA184C6EC00049D974 /* AVFoundation.framework */,
 				AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */,
 				AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */,
@@ -370,6 +431,14 @@
 				AA42F46E18506CD90020252B /* bubbleMine@2x.png in Resources */,
 				AA42F46F18506CD90020252B /* bubbleSomeone.png in Resources */,
 				AA42F47018506CD90020252B /* bubbleSomeone@2x.png in Resources */,
+				AA54EDF81851772100BF6074 /* blackArrow.png in Resources */,
+				AA54EDF91851772100BF6074 /* blackArrow@2x.png in Resources */,
+				AA54EDFA1851772100BF6074 /* blueArrow.png in Resources */,
+				AA54EDFB1851772100BF6074 /* blueArrow@2x.png in Resources */,
+				AA54EDFC1851772100BF6074 /* grayArrow.png in Resources */,
+				AA54EDFD1851772100BF6074 /* grayArrow@2x.png in Resources */,
+				AA54EDFE1851772100BF6074 /* whiteArrow.png in Resources */,
+				AA54EDFF1851772100BF6074 /* whiteArrow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +482,7 @@
 				AAD04944183F5CE500FCB3B1 /* friendlistViewController.m in Sources */,
 				AA6404891843165700340BFB /* ChatViewController.m in Sources */,
 				AA44BD1318447F8C0021831C /* ChatCell.m in Sources */,
+				AA54EDF71851772100BF6074 /* EGORefreshTableHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

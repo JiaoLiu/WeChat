@@ -48,6 +48,9 @@
     NSURL *recordedFile;
     
     NSData *voiceData;
+    
+    NSString *queryTime;
+    NSDate *queryDate;
 }
 @synthesize user;
 @synthesize userImageData;
@@ -134,11 +137,22 @@
         
         NSDateFormatter *dateFormatter =[[[NSDateFormatter alloc] init] autorelease];
         [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        queryDate = [[NSDate date] retain];
+        queryTime = [[dateFormatter stringFromDate:queryDate] retain];
+        
         timeLable = [[UILabel alloc] init];
         timeLable.textAlignment = NSTextAlignmentCenter;
         timeLable.textColor = [UIColor blackColor];
         timeLable.font = [UIFont systemFontOfSize:14];
-        timeLable.text = [dateFormatter stringFromDate:[NSDate date]];
+        timeLable.text = queryTime;
+        
+        if (_refreshHeaderView == nil) {
+            EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - msgTable.bounds.size.height, self.view.frame.size.width, msgTable.bounds.size.height)];
+            view.delegate = self;
+            [msgTable addSubview:view];
+            _refreshHeaderView = view;
+            [view release];
+        }
         
     }
     return self;
@@ -158,16 +172,16 @@
 #pragma mark - loadMsgData
 - (void)loadMsgData
 {
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *currentDate = [dateFormatter stringFromDate:[NSDate date]];
     PFQuery *query = [PFQuery queryWithClassName:chatLog];
-    [query whereKey:@"date" hasPrefix:currentDate];
+    [query whereKey:@"date" greaterThanOrEqualTo:queryTime];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         //NSLog(@"%d+++%d",_data.count, objects.count);
         if (_data.count != objects.count) {
+            NSString *lastDate = [[[objects objectAtIndex:0] objectForKey:@"date"] substringToIndex:10];
+            timeLable.text = lastDate;
             [_data removeAllObjects];
             [_data addObjectsFromArray:objects];
+            [_data retain];
             [msgTable reloadData];
             if (msgTable.contentSize.height > msgTable.frame.size.height) {
                 [msgTable setContentOffset:CGPointMake(0, msgTable.contentSize.height - msgTable.frame.size.height) animated:YES];
@@ -576,7 +590,67 @@
         }]; 
     }
 }
+
+#pragma mark - Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+	
+	//  should be calling your tableviews data source model to reload
+	//  put here just for demo
+    [self viewWillDisappear:YES];
+    NSDateFormatter *dateFormatter =[[[NSDateFormatter alloc] init] autorelease];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    queryDate = [[NSDate dateWithTimeInterval: -24*60*60 sinceDate:queryDate] retain];
+    queryTime = [[dateFormatter stringFromDate:queryDate] retain];
+	_reloading = YES;
     
+}
+
+- (void)doneLoadingTableViewData{
+	
+	//  model should call this when its done loading
+	_reloading = NO;
+	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:msgTable];
+	[self viewWillAppear:YES];
+    
+}
+
+#pragma mark - UIScrollViewDelegate Methods
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+	
+	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+    
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+	
+	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+	
+}
+
+#pragma mark - EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+	
+	[self reloadTableViewDataSource];
+	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
+	
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+	
+	return _reloading; // should return if data source model is reloading
+	
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+	
+	return [NSDate date]; // should return date data source was last changed
+	
+}
+
+
 #pragma mark - Other    
 - (void)viewDidLoad 
 {
@@ -637,6 +711,7 @@
     [player release];
     [recorder release];
     [playBtn release];
+    [_refreshHeaderView release];
     recordedFile = nil;
     chatLog = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
