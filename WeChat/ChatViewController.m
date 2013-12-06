@@ -161,6 +161,10 @@
 #pragma mark -  back to friendlist
 - (void)backToPrev
 {
+    // avoid crash if isRealoading
+    if (_reloading) {
+        [self viewWillAppear:YES];
+    }
     self.view.alpha = 0;
     friendlistViewController *listView = [[[friendlistViewController alloc] init] autorelease];
     [self presentViewController:listView animated:YES completion:^{
@@ -654,16 +658,16 @@
 #pragma mark - Other    
 - (void)viewDidLoad 
 {
-        [super viewDidLoad];    
-	// Do any additional setup after loading the view.  
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];  
-    if (version >= 5.0) {   
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:   UIKeyboardWillChangeFrameNotification object:nil];  
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 5.0) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:   UIKeyboardWillChangeFrameNotification object:nil];
     }
-        else {  
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:  UIKeyboardWillShowNotification object:nil]; 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDismiss:) name:   UIKeyboardWillHideNotification object:nil]; 
-    }   
+    else {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardShow:) name:  UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardDismiss:) name:   UIKeyboardWillHideNotification object:nil];
+    }
     [self performSelector:@selector(setTitle) withObject:nil afterDelay:2];
     chatLog = [[NSString alloc] init];
     _data = [[NSMutableArray alloc] init];
