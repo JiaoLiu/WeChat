@@ -163,7 +163,7 @@
 {
     // avoid crash if isRealoading
     if (_reloading) {
-        [self viewWillAppear:YES];
+        timer = [[NSTimer alloc] init];
     }
     self.view.alpha = 0;
     friendlistViewController *listView = [[[friendlistViewController alloc] init] autorelease];
