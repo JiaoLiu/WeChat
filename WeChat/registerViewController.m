@@ -37,7 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     UILabel *Label = [[[UILabel alloc] init] autorelease];
     Label.frame = CGRectMake(SCREEN_WIDTH/2 -30, 20, 60, 30);
     Label.text = @"注册";
@@ -232,7 +232,11 @@
 #pragma mark - PickImage
 - (void)showSheet :(id)sender
 {
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Photos", @"Camera", nil];
+    UIActionSheet *actionSheet = [[[UIActionSheet alloc] init] autorelease];
+    if (![imageData isEqualToData:[NSData dataWithBytes:nil length:0]]) {
+        [actionSheet initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Photos", @"Camera", @"Remove Image", nil];
+    }
+    else [actionSheet initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Photos", @"Camera", nil];
     actionSheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
     [actionSheet showInView:self.view];
 }
@@ -244,6 +248,10 @@
     }
     if (buttonIndex == 1) {
         [self cameraCapture];
+    }
+    if (buttonIndex == 2) {
+        imageData = [[NSData dataWithBytes:nil length:0] retain];
+        [IDImage setImage:[UIImage imageWithData:imageData] forState:UIControlStateNormal];
     }
 }
 
