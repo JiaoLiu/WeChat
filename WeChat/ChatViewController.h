@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 
-@interface ChatViewController : UIViewController <UIAlertViewDelegate,UITableViewDataSource,UITextFieldDelegate,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,EGORefreshTableHeaderDelegate>
+@interface ChatViewController : UIViewController <UIAlertViewDelegate,UITableViewDataSource,UITextViewDelegate,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,EGORefreshTableHeaderDelegate>
 {
     NSString *user;
     NSData *userImageData;

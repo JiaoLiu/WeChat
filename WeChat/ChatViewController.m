@@ -23,9 +23,10 @@
 @implementation ChatViewController
 {
     UILabel *title;
-    UIView *textView;
-    UITextField *textInput;
+    UIView *_textView;
+    UITextView *textInput;
     UITableView *msgTable;
+    UIView *moreView;
     
     UIButton *recordingBtn;
     UIButton *recordBtn;
@@ -51,6 +52,7 @@
     
     NSString *queryTime;
     NSDate *queryDate;
+    BOOL moreViewShow;
 }
 @synthesize user;
 @synthesize userImageData;
@@ -65,7 +67,7 @@
         UITapGestureRecognizer *tapOnScreen = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(textInputReturn)] autorelease];
         [self.view addGestureRecognizer:tapOnScreen];
         
-        //ADD VIEW ITEMS
+        // 导航栏
         UINavigationBar *nav = [[[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)] autorelease];
         [nav setBackgroundImage:[UIImage generateColorImage:[UIColor grayColor] size:nav.frame.size] forBarMetrics:UIBarMetricsDefault];
         title = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 70, 5, 140, 30)];
@@ -81,33 +83,27 @@
         back.backgroundColor = [UIColor clearColor];
         [back addTarget:self action:@selector(backToPrev) forControlEvents:UIControlEventTouchUpInside];
         
-        cameraBtn = [[[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)] autorelease];
-        [cameraBtn setImage:[UIImage imageNamed:@"camera.jpg"] forState:UIControlStateNormal];
-        cameraBtn.backgroundColor = [UIColor clearColor];
-        [cameraBtn addTarget:self action:@selector(cameraCapture) forControlEvents:UIControlEventTouchUpInside];
-        
         UIBarButtonItem *backBtn = [[[UIBarButtonItem alloc] initWithCustomView:back] autorelease];
-        UIBarButtonItem *cameraItem = [[[UIBarButtonItem alloc] initWithCustomView:cameraBtn] autorelease];
         
         UINavigationItem *navItem = [[[UINavigationItem alloc] init] autorelease];
         navItem.leftBarButtonItem = backBtn;
-        navItem.rightBarButtonItem = cameraItem;
         [nav pushNavigationItem:navItem animated:NO];
         [self.view addSubview:nav];
         
-        textView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, 60)];
-        textView.backgroundColor = [UIColor lightGrayColor];
-        [self.view addSubview:textView];
+        // 输入界面以及控件
+        _textView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 80, SCREEN_WIDTH, 60)];
+        _textView.backgroundColor = [UIColor lightGrayColor];
+        [self.view addSubview:_textView];
         
-        textInput = [[UITextField alloc] initWithFrame:CGRectMake(50, 10, SCREEN_WIDTH - 100, 40)];
+        textInput = [[UITextView alloc] initWithFrame:CGRectMake(50, 10, SCREEN_WIDTH - 100, 40)];
         textInput.layer.cornerRadius = 3;
         textInput.layer.borderColor = [UIColor whiteColor].CGColor;
         textInput.layer.borderWidth = 1;
         textInput.backgroundColor = [UIColor whiteColor];
-        textInput.font = [UIFont systemFontOfSize:25];
+        textInput.font = [UIFont systemFontOfSize:20];
         textInput.returnKeyType = UIReturnKeySend;
         textInput.delegate = self;
-        [textView addSubview:textInput];
+        [_textView addSubview:textInput];
         
         recordingBtn = [[UIButton alloc] initWithFrame:CGRectMake(50, 10, SCREEN_WIDTH - 100, 40)];
         [recordingBtn setTitle:@"按住说话" forState:UIControlStateNormal];
@@ -117,18 +113,19 @@
         [recordingBtn addTarget:self action:@selector(recording) forControlEvents:UIControlEventTouchDown];
         [recordingBtn addTarget:self action:@selector(sendVoice) forControlEvents:UIControlEventTouchUpInside];
         
-        UIButton *imageBtn = [[[UIButton alloc] initWithFrame:CGRectMake(textInput.frame.origin.x + textInput.frame.size.width + 5, 10, 40, 40)] autorelease];
-        imageBtn.backgroundColor = [UIColor clearColor];
-        [imageBtn setImage:[UIImage imageNamed:@"image.jpg"] forState:UIControlStateNormal];
-        [imageBtn addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchUpInside];
-        [textView addSubview:imageBtn];
+        UIButton *moreBtn = [[[UIButton alloc] initWithFrame:CGRectMake(textInput.frame.origin.x + textInput.frame.size.width + 5, 10, 40, 40)] autorelease];
+        moreBtn.backgroundColor = [UIColor clearColor];
+        [moreBtn setImage:[UIImage imageNamed:@"add"] forState:UIControlStateNormal];
+        [moreBtn addTarget:self action:@selector(showAndDismissMoreView) forControlEvents:UIControlEventTouchUpInside];
+        [_textView addSubview:moreBtn];
         
         recordBtn = [[UIButton alloc] initWithFrame:CGRectMake(5, 10, 40, 40)];
         recordBtn.backgroundColor = [UIColor clearColor];
         [recordBtn setImage:[UIImage imageNamed:@"mic.jpg"] forState:UIControlStateNormal];
         [recordBtn addTarget:self action:@selector(textOrRecord) forControlEvents:UIControlEventTouchUpInside];
-        [textView addSubview:recordBtn];
+        [_textView addSubview:recordBtn];
         
+        // 聊天显示
         msgTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, SCREEN_HEIGHT - 120)];
         msgTable.dataSource = self;
         msgTable.delegate = self;
@@ -154,8 +151,84 @@
             [view release];
         }
         
+        // 更多功能界面
+        moreView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT - 20, SCREEN_WIDTH, 216)];
+        moreView.backgroundColor = [UIColor grayColor];
+        [self.view addSubview:moreView];
+        moreViewShow = NO;
+        
+        UIButton *imageBtn = [[[UIButton alloc] initWithFrame:CGRectMake(10, 10, (moreView.frame.size.height - 30) / 2, (moreView.frame.size.height - 30) / 2)] autorelease];
+        imageBtn.backgroundColor = [UIColor clearColor];
+        [imageBtn setImage:[UIImage imageNamed:@"image"] forState:UIControlStateNormal];
+        [imageBtn addTarget:self action:@selector(pickImage) forControlEvents:UIControlEventTouchUpInside];
+        [moreView addSubview:imageBtn];
+        
+        cameraBtn = [[[UIButton alloc] initWithFrame:CGRectMake(imageBtn.frame.origin.x + imageBtn.frame.size.width + 10, 10, (moreView.frame.size.height - 30) / 2, (moreView.frame.size.height - 30) / 2)] autorelease];
+        [cameraBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
+        cameraBtn.backgroundColor = [UIColor clearColor];
+        [cameraBtn addTarget:self action:@selector(cameraCapture) forControlEvents:UIControlEventTouchUpInside];
+        [moreView addSubview:cameraBtn];
+        
     }
     return self;
+}
+
+#pragma mark - show/dismiss moreView
+- (void)showAndDismissMoreView
+{
+    if (moreViewShow) {
+        [UIView animateWithDuration:0.3 animations:^{
+            moreView.frame = CGRectOffset(moreView.frame, 0, 216);
+            moreViewShow = NO;
+            
+            CGFloat yOffset = 216;
+            if (_textView.frame.origin.y == SCREEN_HEIGHT - 80) {
+                [textInput resignFirstResponder];
+                return ;
+            }
+            
+            CGRect inputFieldRect = _textView.frame;
+            CGRect tableRect = msgTable.frame;
+            
+            inputFieldRect.origin.y += yOffset;
+            tableRect.size.height += yOffset;
+            msgTable.frame = tableRect;
+            _textView.frame = inputFieldRect;
+            if (msgTable.contentSize.height > msgTable.frame.size.height) {
+                [msgTable setContentOffset:CGPointMake(0, msgTable.contentSize.height - msgTable.frame.size.height) animated:YES];
+            }
+        }];
+    }
+    else {
+        if (isRecording) {
+            [self textOrRecord];
+        }
+        [UIView animateWithDuration:0.3 animations:^{
+            moreView.frame = CGRectOffset(moreView.frame, 0, -216);
+            moreViewShow = YES;
+            
+            CGFloat yOffset = -216;
+            if (_textView.frame.origin.y == SCREEN_HEIGHT - 296 || _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 24 * 1 || _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 24 * 2) {
+                [textInput resignFirstResponder];
+                return ;
+            }
+            if (_textView.frame.origin.y == SCREEN_HEIGHT - 296 - 36 || _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 36 - 24 * 1 || _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 36 - 24 * 2) {
+                [textInput resignFirstResponder];
+                yOffset = 36;
+            }
+            
+            CGRect inputFieldRect = _textView.frame;
+            CGRect tableRect = msgTable.frame;
+            
+            inputFieldRect.origin.y += yOffset;
+            tableRect.size.height += yOffset;
+            msgTable.frame = tableRect;
+            _textView.frame = inputFieldRect;
+            if (msgTable.contentSize.height > msgTable.frame.size.height) {
+                [msgTable setContentOffset:CGPointMake(0, msgTable.contentSize.height - msgTable.frame.size.height) animated:YES];
+            }
+        }];
+    }
 }
 
 #pragma mark -  back to friendlist
@@ -197,27 +270,67 @@
 #pragma mark - textInput delegate
 - (void)textInputReturn
 {
+    if (moreViewShow) {
+        [self showAndDismissMoreView];
+    }
     [textInput resignFirstResponder];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if (![textInput.text isEqualToString:@""] && ![chatLog isEqualToString:@""]) {
-        [self showLoading];
-        NSData *msgData = [textInput.text dataUsingEncoding:NSUTF8StringEncoding];
-        PFObject *sendObjects = [PFObject objectWithClassName:chatLog];
-        [sendObjects setObject:msgData forKey:@"msg"];
-        [sendObjects setObject:[PFUser currentUser].username forKey:@"user"];
-        [sendObjects setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
-        [sendObjects saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                [self dismissLoading];
-            }
-        }];
-        textInput.text = @"";
-        [self loadMsgData];
+    // 将textView大小存起来
+    CGRect textInputRect = textInput.frame;
+    CGRect textViewRect = _textView.frame;
+    CGRect tableRect = msgTable.frame;
+    
+    if ([text isEqualToString:@"\n"]) { // send btn
+        if (![textInput.text isEqualToString:@""] && ![chatLog isEqualToString:@""]) {
+            [self showLoading];
+            NSData *msgData = [textInput.text dataUsingEncoding:NSUTF8StringEncoding];
+            PFObject *sendObjects = [PFObject objectWithClassName:chatLog];
+            [sendObjects setObject:msgData forKey:@"msg"];
+            [sendObjects setObject:[PFUser currentUser].username forKey:@"user"];
+            [sendObjects setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
+            [sendObjects saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    [self dismissLoading];
+                }
+            }];
+            textInput.text = @"";
+            [self loadMsgData];
+        }
+        [self textInputReturn];
+        textInputRect.size.height = 40;
+        textInput.frame = textInputRect;
+        textViewRect.size.height = 60;
+        textViewRect.origin.y = SCREEN_HEIGHT - 80;
+        _textView.frame = textViewRect;
+        tableRect.size.height = SCREEN_HEIGHT - 120;
+        msgTable.frame = tableRect;
+        return YES;
     }
-    [textInput resignFirstResponder];
+    
+    // 动态调整textView大小
+    CGSize size = [textInput.text sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(textInput.frame.size.width , CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
+    NSLog(@"%f-----%f",size.height,textInput.frame.size.height);
+    if (size.height > textInput.frame.size.height - 16 && textInput.frame.size.height < 88) {
+        textViewRect.size.height += 24;
+        textViewRect.origin.y -= 24;
+        _textView.frame = textViewRect;
+        textInputRect.size.height += 24;
+        textInput.frame = textInputRect;
+        tableRect.size.height -= 24;
+        msgTable.frame = tableRect;
+    }
+    if (textInput.frame.size.height > 40 && size.height < textInput.frame.size.height - 16) {
+        textViewRect.size.height -= 24;
+        textViewRect.origin.y += 24;
+        _textView.frame = textViewRect;
+        textInputRect.size.height -= 24;
+        textInput.frame = textInputRect;
+        tableRect.size.height += 24;
+        msgTable.frame = tableRect;
+    }
     return YES;
 }
 
@@ -235,7 +348,7 @@
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
-    [textView setFrame:CGRectMake(textView.frame.origin.x, textView.frame.origin.y - keyboardFrame.size.height, textView.frame.size.width, textView.frame.size.height)];
+    [_textView setFrame:CGRectMake(_textView.frame.origin.x, _textView.frame.origin.y - keyboardFrame.size.height, _textView.frame.size.width, _textView.frame.size.height)];
     [msgTable setFrame:CGRectMake(msgTable.frame.origin.x, msgTable.frame.origin.y, msgTable.frame.size.width, msgTable.frame.size.height - keyboardFrame.size.height)];
     [UIView commitAnimations];
     if (msgTable.contentSize.height > msgTable.frame.size.height) {
@@ -257,7 +370,7 @@
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:animationDuration];
     [UIView setAnimationCurve:animationCurve];
-    [textView setFrame:CGRectMake(textView.frame.origin.x, textView.frame.origin.y + keyboardFrame.size.height, textView.frame.size.width, textView.frame.size.height)];
+    [_textView setFrame:CGRectMake(_textView.frame.origin.x, _textView.frame.origin.y + keyboardFrame.size.height, _textView.frame.size.width, _textView.frame.size.height)];
     [msgTable setFrame:CGRectMake(msgTable.frame.origin.x, msgTable.frame.origin.y, msgTable.frame.size.width, msgTable.frame.size.height + keyboardFrame.size.height)];
     [UIView commitAnimations];
 }
@@ -270,15 +383,26 @@
     CGRect endKeyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     
     CGFloat yOffset = endKeyboardRect.origin.y - beginKeyboardRect.origin.y;
+
+    if (yOffset == -216 && moreViewShow) {
+        moreView.frame = CGRectOffset(moreView.frame, 0, 216);
+        moreViewShow = NO;
+    }
+    if ((yOffset == -216 && _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 24 * 1 ) || (yOffset == -216 && _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 24 * 2 ) || (yOffset == -216 && _textView.frame.origin.y == SCREEN_HEIGHT - 296) || (yOffset == 216 && moreViewShow)) {
+        return;
+    }
+    if (yOffset == 252 && moreViewShow) {
+        return;
+    }
     
-    CGRect inputFieldRect = textView.frame;
+    CGRect inputFieldRect = _textView.frame;
     CGRect tableRect = msgTable.frame;
     
     inputFieldRect.origin.y += yOffset;
     tableRect.size.height += yOffset;
     msgTable.frame = tableRect;
     [UIView animateWithDuration:duration animations:^{
-        textView.frame = inputFieldRect;
+        _textView.frame = inputFieldRect;
     }];
     if (msgTable.contentSize.height > msgTable.frame.size.height) {
         [msgTable setContentOffset:CGPointMake(0, msgTable.contentSize.height - msgTable.frame.size.height) animated:YES];
@@ -403,6 +527,7 @@
 #pragma mark - PickImage
 - (void)cameraCapture
 {
+    [self textInputReturn];
     UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
     imagepicker.delegate = self;
     imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -411,7 +536,8 @@
 }
 
 - (void)pickImage
-{   
+{
+    [self textInputReturn];
     UIImagePickerController *imagepicker = [[UIImagePickerController alloc] init];
     imagepicker.delegate = self;
     imagepicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -511,15 +637,16 @@
     {
         isRecording = NO;
         [recordingBtn removeFromSuperview];
-        [textView addSubview:textInput];
+        [_textView addSubview:textInput];
         [recordBtn setImage:[UIImage imageNamed:@"mic.jpg"] forState:UIControlStateNormal];
         [textInput becomeFirstResponder];
     }
     else
     {
         isRecording = YES;
+        [self textInputReturn];
         [textInput removeFromSuperview];
-        [textView addSubview:recordingBtn];
+        [_textView addSubview:recordingBtn];
         [recordBtn setImage:[UIImage imageNamed:@"Text"] forState:UIControlStateNormal];
     }
 }
@@ -706,7 +833,7 @@
 {
     [super dealloc];
     [title release];
-    [textView release];
+    [_textView release];
     [_data release];
     [timer release];
     [timeLable release];
@@ -716,6 +843,7 @@
     [recorder release];
     [playBtn release];
     [_refreshHeaderView release];
+    [moreView release];
     recordedFile = nil;
     chatLog = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
