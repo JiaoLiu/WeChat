@@ -53,6 +53,8 @@
     NSString *queryTime;
     NSDate *queryDate;
     BOOL moreViewShow;
+    
+    CLLocationManager *locationManager;
 }
 @synthesize user;
 @synthesize userImageData;
@@ -166,48 +168,53 @@
         cameraBtn = [[[UIButton alloc] initWithFrame:CGRectMake(imageBtn.frame.origin.x + imageBtn.frame.size.width + 10, 10, (moreView.frame.size.height - 30) / 2, (moreView.frame.size.height - 30) / 2)] autorelease];
         [cameraBtn setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
         cameraBtn.backgroundColor = [UIColor clearColor];
-        [cameraBtn addTarget:self action:@selector(cameraCapture) forControlEvents:UIControlEventTouchUpInside];
+        [cameraBtn addTarget:self action:@selector(cameraCapture) forControlEvents:UIControlEventTouchUpInside];    
         [moreView addSubview:cameraBtn];
         
-    }
+        UIButton *locationBtn = [[[UIButton alloc] initWithFrame:CGRectMake(cameraBtn.frame.origin.x + cameraBtn.frame.size.width + 10, 10, (moreView.frame.size.height - 30) / 2, (moreView.frame.size.height - 30) / 2)] autorelease];
+        locationBtn.backgroundColor = [UIColor clearColor];
+        [locationBtn setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
+        [locationBtn addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
+        [moreView addSubview:locationBtn];
+    }   
     return self;
-}
-
-#pragma mark - show/dismiss moreView
-- (void)showAndDismissMoreView
-{
-    if (moreViewShow) {
-        [UIView animateWithDuration:0.3 animations:^{
-            moreView.frame = CGRectOffset(moreView.frame, 0, 216);
-            moreViewShow = NO;
+}   
+    
+#pragma mark - show/dismiss moreView    
+- (void)showAndDismissMoreView  
+{   
+    if (moreViewShow) { 
+        [UIView animateWithDuration:0.3 animations:^{   
+            moreView.frame = CGRectOffset(moreView.frame, 0, 216);  
+            moreViewShow = NO;  
+                
+            CGFloat yOffset = 216;  
+            if (_textView.frame.origin.y == SCREEN_HEIGHT - 80) {   
+                [textInput resignFirstResponder];   
+                return ;    
+            }   
+                
+            CGRect inputFieldRect = _textView.frame;    
+            CGRect tableRect = msgTable.frame;  
+                
+            inputFieldRect.origin.y += yOffset; 
+            tableRect.size.height += yOffset;   
+            msgTable.frame = tableRect; 
+            _textView.frame = inputFieldRect;   
+            if (msgTable.contentSize.height > msgTable.frame.size.height) { 
+                [msgTable setContentOffset:CGPointMake(0, msgTable.contentSize.height - msgTable.frame.size.height) animated:YES];  
+            }   
+        }]; 
+    }   
+    else {  
+        if (isRecording) {  
+            [self textOrRecord];    
+        }   
+        [UIView animateWithDuration:0.3 animations:^{   
+            moreView.frame = CGRectOffset(moreView.frame, 0, -216); 
+            moreViewShow = YES; 
             
-            CGFloat yOffset = 216;
-            if (_textView.frame.origin.y == SCREEN_HEIGHT - 80) {
-                [textInput resignFirstResponder];
-                return ;
-            }
-            
-            CGRect inputFieldRect = _textView.frame;
-            CGRect tableRect = msgTable.frame;
-            
-            inputFieldRect.origin.y += yOffset;
-            tableRect.size.height += yOffset;
-            msgTable.frame = tableRect;
-            _textView.frame = inputFieldRect;
-            if (msgTable.contentSize.height > msgTable.frame.size.height) {
-                [msgTable setContentOffset:CGPointMake(0, msgTable.contentSize.height - msgTable.frame.size.height) animated:YES];
-            }
-        }];
-    }
-    else {
-        if (isRecording) {
-            [self textOrRecord];
-        }
-        [UIView animateWithDuration:0.3 animations:^{
-            moreView.frame = CGRectOffset(moreView.frame, 0, -216);
-            moreViewShow = YES;
-            
-            CGFloat yOffset = -216;
+            CGFloat yOffset = -216; 
             if (_textView.frame.origin.y == SCREEN_HEIGHT - 296 || _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 24 * 1 || _textView.frame.origin.y == SCREEN_HEIGHT - 296 - 24 * 2) {
                 [textInput resignFirstResponder];
                 return ;
@@ -232,8 +239,8 @@
 }
 
 #pragma mark -  back to friendlist
-- (void)backToPrev
-{
+- (void)backToPrev  
+{   
     // avoid crash if isRealoading
     if (_reloading) {
         timer = [[NSTimer alloc] init];
@@ -312,7 +319,7 @@
     
     // 动态调整textView大小
     CGSize size = [textInput.text sizeWithFont:[UIFont systemFontOfSize:20] constrainedToSize:CGSizeMake(textInput.frame.size.width , CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-    NSLog(@"%f-----%f",size.height,textInput.frame.size.height);
+    //NSLog(@"%f-----%f",size.height,textInput.frame.size.height);
     if (size.height > textInput.frame.size.height - 16 && textInput.frame.size.height < 88) {
         textViewRect.size.height += 24;
         textViewRect.origin.y -= 24;
@@ -689,10 +696,53 @@
     [player play];
 }
 
-#pragma mark - show Loading 
+#pragma mark - sendLocation
+ - (void)sendLocation
+{
+    locationManager = [[CLLocationManager alloc] init] ;
+    locationManager.delegate = self;
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    locationManager.distanceFilter = 100;
+    [locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    if (newLocation != nil) {
+        [locationManager stopUpdatingLocation];
+    }
+    //CLLocationCoordinate2D loc = [newLocation coordinate];
+    //float longitude = loc.longitude;
+    //float latitude = loc.latitude;
+    CLGeocoder *geoCoder = [[[CLGeocoder alloc] init] autorelease];
+    [geoCoder reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        CLPlacemark *placemark = [placemarks objectAtIndex:0];
+        NSString *locString = [[[NSString alloc] init] autorelease];
+        if (placemark.thoroughfare != nil) {
+            locString = [NSString stringWithFormat:@"我在: %@,%@,%@", placemark.country,placemark.administrativeArea, placemark.thoroughfare];
+        }
+        if (![locString isEqualToString:@""] && ![chatLog isEqualToString:@""])
+        {
+            [self showLoading];
+            NSData *msgData = [locString dataUsingEncoding:NSUTF8StringEncoding];
+            PFObject *sendObjects = [PFObject objectWithClassName:chatLog];
+            [sendObjects setObject:msgData forKey:@"msg"];
+            [sendObjects setObject:[PFUser currentUser].username forKey:@"user"];
+            [sendObjects setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
+            [sendObjects saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    [self dismissLoading];
+                }
+            }];
+        }
+    }];
+    [self textInputReturn];
+}
+
+#pragma mark - show Loading
 - (void)showLoading
-{   
-    if (!loadingView) { 
+{
+    if (!loadingView) {
             UIWindow *window = [[UIApplication sharedApplication] keyWindow];
             loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,   60)];
             loadingView.backgroundColor = [UIColor blackColor];
@@ -844,6 +894,7 @@
     [playBtn release];
     [_refreshHeaderView release];
     [moreView release];
+    [locationManager release];
     recordedFile = nil;
     chatLog = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
