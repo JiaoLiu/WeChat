@@ -185,12 +185,17 @@
         loadingView.layer.cornerRadius = 3;
         [window addSubview:loadingView];
         
-        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 60)] autorelease];
-        label.text = @"登录中...";
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 30, 80, 30)] autorelease];
+        label.text = @"登录中";
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
         label.backgroundColor = [UIColor clearColor];
         [loadingView addSubview:label];
+        
+        UIActivityIndicatorView *activityIdc = [[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 80, 30)] autorelease];
+        [activityIdc setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+        [activityIdc startAnimating];
+        [loadingView addSubview:activityIdc];
     }
 }
 

@@ -31,7 +31,6 @@
 		AA82E38A183F271F000CB554 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E389183F271F000CB554 /* UIKit.framework */; };
 		AA82E38C183F271F000CB554 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38B183F271F000CB554 /* Foundation.framework */; };
 		AA82E38E183F271F000CB554 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38D183F271F000CB554 /* CoreGraphics.framework */; };
-		AA82E394183F271F000CB554 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA82E392183F271F000CB554 /* InfoPlist.strings */; };
 		AA82E396183F271F000CB554 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E395183F271F000CB554 /* main.m */; };
 		AA82E39A183F271F000CB554 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AA82E399183F271F000CB554 /* AppDelegate.m */; };
 		AA82E39C183F271F000CB554 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = AA82E39B183F271F000CB554 /* Default.png */; };
@@ -106,7 +105,6 @@
 		AA82E38B183F271F000CB554 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		AA82E38D183F271F000CB554 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		AA82E391183F271F000CB554 /* WeChat-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "WeChat-Info.plist"; sourceTree = "<group>"; };
-		AA82E393183F271F000CB554 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		AA82E395183F271F000CB554 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AA82E397183F271F000CB554 /* WeChat-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WeChat-Prefix.pch"; sourceTree = "<group>"; };
 		AA82E398183F271F000CB554 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -319,7 +317,6 @@
 			isa = PBXGroup;
 			children = (
 				AA82E391183F271F000CB554 /* WeChat-Info.plist */,
-				AA82E392183F271F000CB554 /* InfoPlist.strings */,
 				AA82E395183F271F000CB554 /* main.m */,
 				AA82E397183F271F000CB554 /* WeChat-Prefix.pch */,
 				AA82E39B183F271F000CB554 /* Default.png */,
@@ -419,7 +416,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA82E394183F271F000CB554 /* InfoPlist.strings in Resources */,
 				AA82E39C183F271F000CB554 /* Default.png in Resources */,
 				AA82E39E183F271F000CB554 /* Default@2x.png in Resources */,
 				AA82E3A0183F271F000CB554 /* Default-568h@2x.png in Resources */,
@@ -513,14 +509,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		AA82E392183F271F000CB554 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AA82E393183F271F000CB554 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		AA82E3A1183F271F000CB554 /* MainStoryboard.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -619,7 +607,8 @@
 		AA82E3C0183F2720000CB554 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Chongqing Sijian Technology Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Chongqing Sijian Technology Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -629,7 +618,8 @@
 				INFOPLIST_FILE = "WeChat/WeChat-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "74C00E17-D69F-48AE-9AC0-1BAB4F5E50B6";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "74C00E17-D69F-48AE-9AC0-1BAB4F5E50B6";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

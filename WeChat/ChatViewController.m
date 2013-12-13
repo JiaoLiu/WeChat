@@ -743,24 +743,29 @@
 - (void)showLoading
 {
     if (!loadingView) {
-            UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-            loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,   60)];
-            loadingView.backgroundColor = [UIColor blackColor];
-            loadingView.alpha = 0.7;
-            loadingView.layer.cornerRadius = 3;
-            [window addSubview:loadingView];
-            
-            UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 60)] autorelease];
-            label.text = @"发送中...";
-            label.textColor = [UIColor whiteColor];
-            label.textAlignment = NSTextAlignmentCenter;
-            label.backgroundColor = [UIColor clearColor];
-            [loadingView addSubview:label];
-        }
+        UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+        loadingView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 30, 80,   60)];
+        loadingView.backgroundColor = [UIColor blackColor];
+        loadingView.alpha = 0.7;
+        loadingView.layer.cornerRadius = 3;
+        [window addSubview:loadingView];
+        
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 30, 80, 30)] autorelease];
+        label.text = @"发送中";
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.backgroundColor = [UIColor clearColor];
+        [loadingView addSubview:label];
+        
+        UIActivityIndicatorView *activityIdc = [[[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 80, 30)] autorelease];
+        [activityIdc setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];
+        [activityIdc startAnimating];
+        [loadingView addSubview:activityIdc];
     }
-    
-- (void)dismissLoading  
-{   
+}
+
+- (void)dismissLoading
+{
         if (loadingView) {
             [UIView animateWithDuration:0.3 animations:^{
                 loadingView.alpha = 0;
