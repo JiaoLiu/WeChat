@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "EGORefreshTableHeaderView.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface ChatViewController : UIViewController <UIAlertViewDelegate,UITableViewDataSource,UITextViewDelegate,UITableViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,EGORefreshTableHeaderDelegate,CLLocationManagerDelegate>
 {

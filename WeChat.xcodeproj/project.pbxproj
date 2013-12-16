@@ -28,6 +28,8 @@
 		AA54EDFF1851772100BF6074 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AA54EDF61851772100BF6074 /* whiteArrow@2x.png */; };
 		AA61CE2C18599C7C00FC903E /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = AA61CE2B18599C7C00FC903E /* map.png */; };
 		AA6404891843165700340BFB /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA6404881843165700340BFB /* ChatViewController.m */; };
+		AA6D084B185EC1D8005E325D /* video.png in Resources */ = {isa = PBXBuildFile; fileRef = AA6D084A185EC1D8005E325D /* video.png */; };
+		AA6D084D185EC650005E325D /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6D084C185EC650005E325D /* MediaPlayer.framework */; };
 		AA82E38A183F271F000CB554 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E389183F271F000CB554 /* UIKit.framework */; };
 		AA82E38C183F271F000CB554 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38B183F271F000CB554 /* Foundation.framework */; };
 		AA82E38E183F271F000CB554 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA82E38D183F271F000CB554 /* CoreGraphics.framework */; };
@@ -100,6 +102,8 @@
 		AA61CE2B18599C7C00FC903E /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = map.png; path = resource/map.png; sourceTree = "<group>"; };
 		AA6404871843165700340BFB /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		AA6404881843165700340BFB /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		AA6D084A185EC1D8005E325D /* video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = video.png; path = resource/video.png; sourceTree = "<group>"; };
+		AA6D084C185EC650005E325D /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		AA82E386183F271F000CB554 /* WeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA82E389183F271F000CB554 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		AA82E38B183F271F000CB554 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -152,6 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA6D084D185EC650005E325D /* MediaPlayer.framework in Frameworks */,
 				AA8E9BBB184C6EC00049D974 /* AVFoundation.framework in Frameworks */,
 				AA82E3DD183F2A16000CB554 /* AudioToolbox.framework in Frameworks */,
 				AA82E3DB183F2A0F000CB554 /* CFNetwork.framework in Frameworks */,
@@ -200,6 +205,7 @@
 				AA199BA91858339300200602 /* camera.png */,
 				AA199BAB1858343E00200602 /* image.png */,
 				AA61CE2B18599C7C00FC903E /* map.png */,
+				AA6D084A185EC1D8005E325D /* video.png */,
 			);
 			name = resource;
 			sourceTree = "<group>";
@@ -269,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				AA54EDE91851772100BF6074 /* EGOTableViewPullRefresh */,
+				AA6D084C185EC650005E325D /* MediaPlayer.framework */,
 				AA8E9BBA184C6EC00049D974 /* AVFoundation.framework */,
 				AA82E3DC183F2A16000CB554 /* AudioToolbox.framework */,
 				AA82E3DA183F2A0F000CB554 /* CFNetwork.framework */,
@@ -443,6 +450,7 @@
 				AA199BAA1858339300200602 /* camera.png in Resources */,
 				AA199BAC1858343E00200602 /* image.png in Resources */,
 				AA61CE2C18599C7C00FC903E /* map.png in Resources */,
+				AA6D084B185EC1D8005E325D /* video.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

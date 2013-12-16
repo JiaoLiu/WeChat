@@ -13,6 +13,7 @@
 #import <Parse/Parse.h>
 #import "ChatCell.h"
 #import <AVFoundation/AVFoundation.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -43,6 +44,9 @@
     UIView *sendImageView;
     
     UIView *loadingView;
+    
+    MPMoviePlayerController *videoPlayer;
+    UIWindow *backgroundWindow;
     
     AVAudioPlayer *player;
     AVAudioRecorder *recorder;
@@ -176,7 +180,14 @@
         [locationBtn setImage:[UIImage imageNamed:@"map"] forState:UIControlStateNormal];
         [locationBtn addTarget:self action:@selector(sendLocation) forControlEvents:UIControlEventTouchUpInside];
         [moreView addSubview:locationBtn];
-    }   
+        
+        UIButton *videoBtn = [[UIButton alloc] initWithFrame:CGRectMake(10, imageBtn.frame.origin.y + imageBtn.frame.size.height + 10, (moreView.frame.size.height - 30) / 2, (moreView.frame.size.height - 30) / 2)];
+        videoBtn.backgroundColor = [UIColor clearColor];
+        [videoBtn setImage:[UIImage imageNamed:@"video"] forState:UIControlStateNormal];
+        [videoBtn addTarget:self action:@selector(recordVideo) forControlEvents:UIControlEventTouchUpInside];
+        [moreView addSubview:videoBtn];
+        
+    }
     return self;
 }   
     
@@ -476,7 +487,7 @@
         else imageView.image = [UIImage imageWithData:[[PFUser currentUser] objectForKey:@"image"]];
         [cell addSubview:imageView];
         
-        if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil) {
+        if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil || [[_data objectAtIndex:indexPath.row] objectForKey:@"video"] != nil) {
             playBtn = [[UIButton alloc] initWithFrame:CGRectMake(60, 20, 100, 30)];
             [playBtn setTitle:@"播放" forState:UIControlStateNormal];
             playBtn.tag = indexPath.row;
@@ -484,7 +495,12 @@
             playBtn.layer.cornerRadius = 5;
             playBtn.layer.borderWidth = 1;
             playBtn.layer.borderColor = [UIColor whiteColor].CGColor;
-            [playBtn addTarget:self action:@selector(playVoice:) forControlEvents:UIControlEventTouchUpInside];
+            if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil) {
+                [playBtn addTarget:self action:@selector(playVoice:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else{
+                [playBtn addTarget:self action:@selector(playVideo:) forControlEvents:UIControlEventTouchUpInside];
+            }
             [cell addSubview:playBtn];
         }
     }
@@ -496,7 +512,7 @@
         else imageView.image = [UIImage imageWithData:userImageData];
         [cell addSubview:imageView];
         
-        if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil) {
+        if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil || [[_data objectAtIndex:indexPath.row] objectForKey:@"video"] != nil) {
             PFFile *voice = [[_data objectAtIndex:indexPath.row] objectForKey:@"voice"];
             voiceData = [voice.getData retain];
             playBtn = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH - 160, 20, 100, 30)];
@@ -506,7 +522,12 @@
             playBtn.layer.cornerRadius = 5;
             playBtn.layer.borderWidth = 1;
             playBtn.layer.borderColor = [UIColor whiteColor].CGColor;
-            [playBtn addTarget:self action:@selector(playVoice:) forControlEvents:UIControlEventTouchUpInside];
+            if ([[_data objectAtIndex:indexPath.row] objectForKey:@"voice"] != nil) {
+                [playBtn addTarget:self action:@selector(playVoice:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else{
+                [playBtn addTarget:self action:@selector(playVideo:) forControlEvents:UIControlEventTouchUpInside];
+            }
             [cell addSubview:playBtn];
         }
     }
@@ -531,7 +552,25 @@
     return timeLable;
 }
 
-#pragma mark - PickImage
+#pragma mark - PickImage/Video
+- (void)recordVideo
+{
+    UIImagePickerController *videoPicker = [[UIImagePickerController alloc] init];
+    videoPicker.delegate = self;
+    videoPicker.allowsEditing = YES;
+    videoPicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    videoPicker.mediaTypes = [[NSArray alloc] initWithObjects: (NSString *) kUTTypeMovie, nil];
+    videoPicker.videoQuality = UIImagePickerControllerQualityType640x480;
+    
+    NSArray *sourceTypes =
+    [UIImagePickerController availableMediaTypesForSourceType:videoPicker.sourceType];
+    if (![sourceTypes containsObject:(NSString *)kUTTypeMovie ]){
+        NSLog(@"Can't save videos");
+    }
+    [self presentModalViewController:videoPicker animated:YES];
+    [videoPicker release];
+}
+
 - (void)cameraCapture
 {
     [self textInputReturn];
@@ -540,6 +579,7 @@
     imagepicker.sourceType = UIImagePickerControllerSourceTypeCamera;
     [self presentViewController:imagepicker animated:YES completion:^{
     }];
+    [imagepicker release];
 }
 
 - (void)pickImage
@@ -550,49 +590,67 @@
     imagepicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:imagepicker animated:YES completion:^{
     }];
+    [imagepicker release];
 }
     
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [picker dismissViewControllerAnimated:YES completion:^{
-            sendImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
-            
+        NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+        // video type
+        if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
+            [self showLoading];
+            PFFile *file = [PFFile fileWithData:[NSData dataWithContentsOfURL:[info objectForKey:UIImagePickerControllerMediaURL]]];
+            PFObject *videoObject = [PFObject objectWithClassName:chatLog];
+            [videoObject setObject:file forKey:@"video"];
+            [videoObject setObject:[PFUser currentUser].username forKey:@"user"];
+            [videoObject setObject:[NSString stringWithFormat:@"%@",[NSDate date]] forKey:@"date"];
+            [videoObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (succeeded) {
+                    [self dismissLoading];
+                }
+                else {
+                    [self dismissLoading];
+                }
+            }];
+            return;
+        }
+        sendImage = [[info objectForKey:UIImagePickerControllerOriginalImage] retain];
         // Resize image
-            UIGraphicsBeginImageContext(CGSizeMake(120, 160));
-            [sendImage drawInRect: CGRectMake(0, 0, 120, 160)];
-            UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
-            UIGraphicsEndImageContext();
+        UIGraphicsBeginImageContext(CGSizeMake(120, 160));
+        [sendImage drawInRect: CGRectMake(0, 0, 120, 160)];
+        UIImage *smallImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
         
-            if (!sendImageView) {
-                UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-                    sendImageView = [[UIView alloc] initWithFrame:CGRectMake(20, SCREEN_HEIGHT/2 - 120, SCREEN_WIDTH -  40, 240)];
-                sendImageView.alpha = 0.7;
-                sendImageView.layer.cornerRadius = 3;
-                sendImageView.backgroundColor = [UIColor blackColor];
-                [window addSubview:sendImageView];
-                
-                UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(sendImageView.frame.size.width/2 - 60, 10, 120, 160)] autorelease];
-                imageView.image = smallImage;
-                [sendImageView addSubview:imageView];
-                
-                UIButton *sendBtn = [[[UIButton alloc]initWithFrame:CGRectMake(10, 180, sendImageView.frame.size.width/2 - 15, 50)] autorelease];
-                [sendBtn setBackgroundImage:[UIImage generateColorImage:[UIColor greenColor] size:sendBtn.frame.size] forState:UIControlStateNormal];
-                [sendBtn setTitle:@"发送" forState:UIControlStateNormal];
-                sendBtn.layer.cornerRadius = 3;
-                [sendBtn addTarget:self action:@selector(sendImage) forControlEvents:UIControlEventTouchUpInside];
-                [sendImageView addSubview:sendBtn];
-                
-                UIButton *cancelBtn = [[[UIButton alloc]initWithFrame:CGRectMake(sendImageView.frame.size.width/2 + 5,  180, sendImageView.frame.size.width/2 - 15, 50)] autorelease];
-                [cancelBtn setBackgroundImage:[UIImage generateColorImage:[UIColor greenColor] size:sendBtn.frame.size  ] forState:UIControlStateNormal];
-                [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-                cancelBtn.layer.cornerRadius = 3;
-                [cancelBtn addTarget:self action:@selector(dismissSend) forControlEvents:UIControlEventTouchUpInside];
-                [sendImageView addSubview:cancelBtn];
-                
-        }   
-    }]; 
-}   
-    
+        if (!sendImageView) {
+            UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+            sendImageView = [[UIView alloc] initWithFrame:CGRectMake(20, SCREEN_HEIGHT/2 - 120, SCREEN_WIDTH -  40, 240)];
+            sendImageView.alpha = 0.7;
+            sendImageView.layer.cornerRadius = 3;
+            sendImageView.backgroundColor = [UIColor blackColor];
+            [window addSubview:sendImageView];
+            
+            UIImageView *imageView = [[[UIImageView alloc] initWithFrame:CGRectMake(sendImageView.frame.size.width/2 - 60, 10, 120, 160)] autorelease];
+            imageView.image = smallImage;
+            [sendImageView addSubview:imageView];
+            
+            UIButton *sendBtn = [[[UIButton alloc]initWithFrame:CGRectMake(10, 180, sendImageView.frame.size.width/2 - 15, 50)] autorelease];
+            [sendBtn setBackgroundImage:[UIImage generateColorImage:[UIColor greenColor] size:sendBtn.frame.size] forState:UIControlStateNormal];
+            [sendBtn setTitle:@"发送" forState:UIControlStateNormal];
+            sendBtn.layer.cornerRadius = 3;
+            [sendBtn addTarget:self action:@selector(sendImage) forControlEvents:UIControlEventTouchUpInside];
+            [sendImageView addSubview:sendBtn];
+            
+            UIButton *cancelBtn = [[[UIButton alloc]initWithFrame:CGRectMake(sendImageView.frame.size.width/2 + 5,  180, sendImageView.frame.size.width/2 - 15, 50)] autorelease];
+            [cancelBtn setBackgroundImage:[UIImage generateColorImage:[UIColor greenColor] size:sendBtn.frame.size  ] forState:UIControlStateNormal];
+            [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+            cancelBtn.layer.cornerRadius = 3;
+            [cancelBtn addTarget:self action:@selector(dismissSend) forControlEvents:UIControlEventTouchUpInside];
+            [sendImageView addSubview:cancelBtn];
+        }
+    }];
+}
+
 - (void)sendImage
     {
         if(sendImageView) {
@@ -694,6 +752,36 @@
     voiceData = [voice.getData retain];
     player = [[AVAudioPlayer alloc] initWithData:voiceData error:nil];
     [player play];
+}
+
+#pragma mark - playVideo
+- (void)playVideo :(id)sender
+{
+    PFFile *video = [[_data objectAtIndex:[sender tag]] objectForKey:@"video"];
+    NSData *videoData = [video.getData retain];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"myMovie.mp4"];
+    
+    [videoData writeToFile:path atomically:YES];
+    NSURL *movieUrl = [NSURL fileURLWithPath:path];
+    videoPlayer = [[MPMoviePlayerController alloc] initWithContentURL:movieUrl];
+    videoPlayer.controlStyle = MPMovieControlStyleFullscreen;
+    //videoPlayer.view.transform = CGAffineTransformConcat(videoPlayer.view.transform, CGAffineTransformMakeRotation(M_PI_2));
+    backgroundWindow = [[UIApplication sharedApplication] keyWindow];
+    [videoPlayer.view setFrame:backgroundWindow.frame];
+    [backgroundWindow addSubview:videoPlayer.view];
+    [videoPlayer play];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(MovieEnd) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+}
+
+- (void)MovieEnd
+{
+    [backgroundWindow removeFromSuperview];
+    [videoPlayer.view removeFromSuperview];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
 #pragma mark - sendLocation
@@ -836,7 +924,6 @@
 	
 }
 
-
 #pragma mark - Other    
 - (void)viewDidLoad 
 {
@@ -900,6 +987,8 @@
     [_refreshHeaderView release];
     [moreView release];
     [locationManager release];
+    [videoPlayer release];
+    [backgroundWindow release];
     recordedFile = nil;
     chatLog = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
