@@ -15,6 +15,7 @@
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+#define VERSION [[[UIDevice currentDevice] systemVersion] floatValue]
 
 @interface friendlistViewController ()
 {
@@ -34,38 +35,9 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        UINavigationBar *nav = [[[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 40)] autorelease];
-        [nav setBackgroundImage:[UIImage generateColorImage:[UIColor grayColor] size:nav.frame.size] forBarMetrics:UIBarMetricsDefault];
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 30, 5, 60, 30)];
-        title.text = @"用户";
-        title.textColor = [UIColor whiteColor];
-        title.textAlignment = NSTextAlignmentCenter;
-        title.font = [UIFont systemFontOfSize:20];
-        title.backgroundColor = [UIColor clearColor];
-        [nav addSubview:title];
-        
-        UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
-        logout.frame = CGRectMake(0, 5, 30, 30);
-        [logout setImage:[UIImage imageNamed:@"logout.jpg"] forState:UIControlStateNormal];
-        logout.backgroundColor = [UIColor clearColor];
-        [logout addTarget:self action:@selector(alertLogout) forControlEvents:UIControlEventTouchUpInside];
-        UIBarButtonItem *logoutBtn = [[[UIBarButtonItem alloc] initWithCustomView:logout] autorelease];
-        
-        UINavigationItem *navItem = [[[UINavigationItem alloc] init] autorelease];
-        navItem.rightBarButtonItem = logoutBtn;
-        [nav pushNavigationItem:navItem animated:NO];
-        [self.view addSubview:nav];
-        
-        friendlistTable = [[[UITableView alloc] initWithFrame:CGRectMake(0, 40, SCREEN_WIDTH, SCREEN_HEIGHT - 60)] autorelease];
-        friendlistTable.dataSource = self;
-        friendlistTable.delegate = self;
-        friendlistTable.rowHeight = 60;
-        [self.view addSubview:friendlistTable];
-        
-        
         data = [[NSMutableArray alloc] init];
-        
         [self loadFriendData];
+        self.view.backgroundColor = [UIColor grayColor];
     }
     return self;
 }
@@ -74,6 +46,40 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    NSInteger yOffset = 0;
+    if (VERSION >= 7.0) {
+        yOffset = 20;
+    }
+    
+    UINavigationBar *nav = [[[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0 + yOffset, SCREEN_WIDTH, 40)] autorelease];
+    [nav setBackgroundImage:[UIImage generateColorImage:[UIColor grayColor] size:nav.frame.size] forBarMetrics:UIBarMetricsDefault];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - 30, 5, 60, 30)];
+    title.text = @"用户";
+    title.textColor = [UIColor whiteColor];
+    title.textAlignment = NSTextAlignmentCenter;
+    title.font = [UIFont systemFontOfSize:20];
+    title.backgroundColor = [UIColor clearColor];
+    [nav addSubview:title];
+    
+    UIButton *logout = [UIButton buttonWithType:UIButtonTypeCustom];
+    logout.frame = CGRectMake(0, 5, 30, 30);
+    [logout setImage:[UIImage imageNamed:@"logout.jpg"] forState:UIControlStateNormal];
+    logout.backgroundColor = [UIColor clearColor];
+    [logout addTarget:self action:@selector(alertLogout) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *logoutBtn = [[[UIBarButtonItem alloc] initWithCustomView:logout] autorelease];
+    
+    UINavigationItem *navItem = [[[UINavigationItem alloc] init] autorelease];
+    navItem.rightBarButtonItem = logoutBtn;
+    [nav pushNavigationItem:navItem animated:NO];
+    [self.view addSubview:nav];
+    
+    friendlistTable = [[[UITableView alloc] initWithFrame:CGRectMake(0, 40 + yOffset, SCREEN_WIDTH, SCREEN_HEIGHT - 60)] autorelease];
+    friendlistTable.dataSource = self;
+    friendlistTable.delegate = self;
+    friendlistTable.rowHeight = 60;
+    [self.view addSubview:friendlistTable];
+    
 }
 
 - (void)didReceiveMemoryWarning
