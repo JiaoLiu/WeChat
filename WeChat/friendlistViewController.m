@@ -184,6 +184,14 @@
     return [[dic objectForKey:[NSString stringWithFormat:@"%c",'A' + section]] count];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section < 27) {
+        return [NSString stringWithFormat:@"%c",'A' + section];
+    }
+    else return @"#";
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellId = [NSString stringWithFormat:@"FrindCell%ld",(long)indexPath.row];
