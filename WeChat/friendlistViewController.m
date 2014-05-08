@@ -186,10 +186,23 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section < 27) {
-        return [NSString stringWithFormat:@"%c",'A' + section];
+    NSMutableArray *temp;
+    if (section < 26) {
+        NSString *title = [NSString stringWithFormat:@"%c",'A' + section];
+        temp = [dic objectForKey:title];
+        if (temp.count == 0) {
+            return nil;
+        }
+        else return title;
     }
-    else return @"#";
+    else
+    {
+        temp = [dic objectForKey:@"#"];
+        if (temp.count == 0) {
+            return nil;
+        }
+        else return @"#";
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
