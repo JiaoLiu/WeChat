@@ -8,6 +8,8 @@ Now this app can :<br>
 -Liu jiao <br>
 -2013/11/25 <br>
 
+---
+
 Register
 
 ![image](https://github.com/JiaoLiu/WeChat/blob/master/ScreenShots/Register.png)
@@ -25,3 +27,24 @@ Chat
 ![image](https://github.com/JiaoLiu/WeChat/blob/master/ScreenShots/Chat1.png)
 
 ![image](https://github.com/JiaoLiu/WeChat/blob/master/ScreenShots/Chat2.png)
+
+---
+
+##Translation
+Register:<br>
+注册－>register<br>
+用户名－>username<br>
+取消－>cancel<br>
+Login:<br>
+登录－>login<br>
+用户名－>username<br>
+密码－>password<br>
+找回密码->find password<br>
+注册－>register<br>
+List:<br>
+用户－>user<br>
+chat:<br>
+发送－>send<br>
+取消－>cancel<br>
+播放－>play<br>
+按住说话－>press to record<br>
